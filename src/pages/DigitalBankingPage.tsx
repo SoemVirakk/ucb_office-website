@@ -1,0 +1,554 @@
+
+interface DigitalBankingPageProps {
+  navigate: (p: Page) => void
+}
+
+const mobileFeatures = [
+  {
+    icon: "💸",
+    title: "Transfer Money",
+    desc: "Send to any UCB account or other Cambodian banks instantly, 24/7. Domestic transfers from just USD 0.25.",
+  },
+  {
+    icon: "📄",
+    title: "Pay Bills",
+    desc: "Pay electricity, water, internet, and more directly from the app. Schedule recurring payments effortlessly.",
+  },
+  {
+    icon: "📱",
+    title: "Mobile Top-up",
+    desc: "Top up any Cambodian mobile network — Cellcard, Smart, Metfone — in seconds.",
+  },
+  {
+    icon: "🔍",
+    title: "QR Payments",
+    desc: "Scan and pay at thousands of merchants across Cambodia and internationally in Thailand, Vietnam, and Singapore.",
+  },
+  {
+    icon: "📊",
+    title: "Financial Insights",
+    desc: "AI-powered spending analysis with category breakdowns, monthly budgets, and savings goals.",
+  },
+  {
+    icon: "💳",
+    title: "Card Management",
+    desc: "Freeze / unfreeze cards instantly, set spending limits, and get real-time transaction notifications.",
+  },
+]
+
+const internetFeatures = [
+  {
+    icon: "🏢",
+    title: "Business Dashboard",
+    desc: "Manage multiple accounts, view consolidated balances, and generate detailed reports.",
+  },
+  {
+    icon: "📤",
+    title: "Bulk Payments",
+    desc: "Upload payroll or supplier payments via Excel/CSV. Process hundreds of transfers in one click.",
+  },
+  {
+    icon: "📅",
+    title: "Scheduled Transfers",
+    desc: "Set recurring transfers and bill payments. Never miss a deadline.",
+  },
+  {
+    icon: "📜",
+    title: "Statement Download",
+    desc: "Download statements in PDF or Excel format for up to 5 years of transaction history.",
+  },
+]
+
+const securityFeatures = [
+  {
+    icon: "🔐",
+    title: "Biometric Login",
+    desc: "Fingerprint and Face ID authentication — your face and fingerprint are your password.",
+  },
+  {
+    icon: "🔔",
+    title: "OTP Verification",
+    desc: "All transactions above USD 100 require One-Time Password verification to your registered number.",
+  },
+  {
+    icon: "📳",
+    title: "Instant Notifications",
+    desc: "Real-time SMS and push notifications for every debit, credit, and login event on your account.",
+  },
+  {
+    icon: "🛡️",
+    title: "256-bit Encryption",
+    desc: "Bank-grade SSL encryption protects all your data and transactions end-to-end.",
+  },
+]
+
+export default function DigitalBankingPage({
+  navigate,
+}: DigitalBankingPageProps) {
+  return (
+    <div>
+      {/* Hero */}
+      <section
+        style={{
+          background: "linear-gradient(135deg, #0A2540 0%, #1A3D5C 100%)",
+          padding: "5rem 0",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            pointerEvents: "none",
+            backgroundImage:
+              "radial-gradient(circle at 1px 1px, rgba(0,156,159,0.1) 1px, transparent 0)",
+            backgroundSize: "40px 40px",
+          }}
+        />
+        <div className="container" style={{ position: "relative", zIndex: 1 }}>
+          <div
+            className="grid-2-col"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "4rem",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  background: "rgba(0,156,159,0.2)",
+                  borderRadius: 20,
+                  padding: "4px 14px",
+                  marginBottom: "1.25rem",
+                }}
+              >
+                <span style={{ fontSize: 14 }}>📱</span>
+                <span
+                  style={{ fontSize: 12, fontWeight: 600, color: "#009C9F" }}
+                >
+                  UCB Mobile App v3.0
+                </span>
+              </div>
+              <h1
+                style={{
+                  fontSize: 42,
+                  fontWeight: 800,
+                  color: "#fff",
+                  lineHeight: 1.15,
+                  marginBottom: "1.25rem",
+                }}
+              >
+                Full Banking,
+                <br />
+                <span style={{ color: "#009C9F" }}>In Your Pocket</span>
+              </h1>
+              <p
+                style={{
+                  fontSize: 17,
+                  color: "rgba(255,255,255,0.75)",
+                  lineHeight: 1.7,
+                  marginBottom: "2rem",
+                }}
+              >
+                UCB Mobile App and Internet Banking give you complete control
+                over your finances — anywhere, anytime, in English or Khmer.
+              </p>
+              <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+                <a
+                  href="#"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                    background: "#fff",
+                    color: "#0A2540",
+                    borderRadius: 10,
+                    padding: "10px 18px",
+                    fontWeight: 600,
+                    fontSize: 14,
+                    textDecoration: "none",
+                    transition: "transform 150ms",
+                  }}
+                >
+                  <span style={{ fontSize: 22 }}>🍎</span>
+                  <div>
+                    <div style={{ fontSize: 9, color: "#6B7280" }}>
+                      Download on the
+                    </div>
+                    <div>App Store</div>
+                  </div>
+                </a>
+                <a
+                  href="#"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                    background: "#009C9F",
+                    color: "#fff",
+                    borderRadius: 10,
+                    padding: "10px 18px",
+                    fontWeight: 600,
+                    fontSize: 14,
+                    textDecoration: "none",
+                    transition: "transform 150ms",
+                  }}
+                >
+                  <span style={{ fontSize: 22 }}>▶</span>
+                  <div>
+                    <div
+                      style={{ fontSize: 9, color: "rgba(255,255,255,0.7)" }}
+                    >
+                      Get it on
+                    </div>
+                    <div>Google Play</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            {/* Phone mockup */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                gap: "1.5rem",
+              }}
+            >
+              {[
+                {
+                  bg: "#1A3D5C",
+                  img: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=280&h=560&fit=crop&auto=format",
+                  alt: "UCB Mobile App dashboard",
+                },
+                {
+                  bg: "#007B7E",
+                  img: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=280&h=560&fit=crop&auto=format",
+                  alt: "UCB Mobile App transfer screen",
+                  transform: "translateY(24px)",
+                },
+              ].map((phone, i) => (
+                <div
+                  key={i}
+                  style={{
+                    width: 200,
+                    height: 400,
+                    borderRadius: 32,
+                    border: "8px solid rgba(255,255,255,0.15)",
+                    overflow: "hidden",
+                    background: phone.bg,
+                    transform: phone.transform ?? "none",
+                    boxShadow: "0 32px 64px rgba(0,0,0,0.4)",
+                  }}
+                >
+                  <img
+                    src={phone.img}
+                    alt={phone.alt}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Mobile features */}
+      <section className="page-section">
+        <div className="container">
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <h2 className="section-title">UCB Mobile Banking</h2>
+            <p className="section-subtitle">
+              Everything you need to manage your money — built for Cambodians.
+            </p>
+          </div>
+          <div
+            className="grid-3"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(3, 1fr)",
+              gap: "1.5rem",
+            }}
+          >
+            {mobileFeatures.map((f) => (
+              <div
+                key={f.title}
+                style={{
+                  padding: "1.5rem",
+                  background: "#fff",
+                  borderRadius: 16,
+                  border: "1px solid #E5E7EB",
+                  transition: "all 150ms",
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLDivElement
+                  el.style.borderColor = "#009C9F"
+                  el.style.background = "#E6F7F7"
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLDivElement
+                  el.style.borderColor = "#E5E7EB"
+                  el.style.background = "#fff"
+                }}
+              >
+                <div style={{ fontSize: 32, marginBottom: "0.875rem" }}>
+                  {f.icon}
+                </div>
+                <h3
+                  style={{
+                    fontSize: 16,
+                    fontWeight: 700,
+                    color: "#0A2540",
+                    marginBottom: 8,
+                  }}
+                >
+                  {f.title}
+                </h3>
+                <p style={{ fontSize: 14, color: "#6B7280", lineHeight: 1.6 }}>
+                  {f.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div style={{ textAlign: "center", marginTop: "2.5rem" }}>
+            <button
+              className="btn-primary"
+              style={{ padding: "0.875rem 2.5rem", fontSize: 16 }}
+            >
+              Register for Mobile Banking
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Internet banking */}
+      <section className="page-section" style={{ background: "#F4F6F8" }}>
+        <div className="container">
+          <div
+            className="grid-2-col"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "4rem",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <h2 className="section-title" style={{ marginBottom: "1rem" }}>
+                UCB Internet Banking
+              </h2>
+              <p
+                style={{
+                  fontSize: 16,
+                  color: "#6B7280",
+                  lineHeight: 1.7,
+                  marginBottom: "2rem",
+                }}
+              >
+                Powerful desktop banking for individuals and businesses. Manage
+                accounts, authorise payments, download reports, and more —
+                directly from your browser.
+              </p>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1rem",
+                  marginBottom: "2rem",
+                }}
+              >
+                {internetFeatures.map((f) => (
+                  <div key={f.title} style={{ display: "flex", gap: 14 }}>
+                    <div
+                      style={{
+                        width: 42,
+                        height: 42,
+                        borderRadius: 12,
+                        background: "#E6F7F7",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: 20,
+                        flexShrink: 0,
+                      }}
+                    >
+                      {f.icon}
+                    </div>
+                    <div>
+                      <div
+                        style={{
+                          fontWeight: 600,
+                          fontSize: 15,
+                          color: "#0A2540",
+                          marginBottom: 4,
+                        }}
+                      >
+                        {f.title}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: 13,
+                          color: "#6B7280",
+                          lineHeight: 1.5,
+                        }}
+                      >
+                        {f.desc}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <button className="btn-primary" onClick={() => navigate("login")}>
+                Access Internet Banking →
+              </button>
+            </div>
+            <div
+              style={{
+                background: "linear-gradient(135deg, #E6F7F7, #F4F6F8)",
+                borderRadius: 20,
+                padding: "2.5rem",
+                border: "1px solid #D1D5DB",
+                minHeight: 360,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <img
+                src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=480&h=320&fit=crop&auto=format"
+                alt="UCB Internet Banking dashboard on laptop"
+                style={{
+                  width: "100%",
+                  borderRadius: 12,
+                  boxShadow: "0 16px 48px rgba(0,0,0,0.15)",
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Security */}
+      <section className="page-section">
+        <div className="container">
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <h2 className="section-title">Your Security, Our Priority</h2>
+            <p className="section-subtitle">
+              Bank with confidence knowing every transaction is protected by
+              multiple layers of security.
+            </p>
+          </div>
+          <div
+            className="grid-4"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(4, 1fr)",
+              gap: "1.25rem",
+            }}
+          >
+            {securityFeatures.map((f) => (
+              <div
+                key={f.title}
+                style={{
+                  padding: "1.75rem 1.25rem",
+                  background: "#fff",
+                  borderRadius: 16,
+                  border: "1px solid #E5E7EB",
+                  textAlign: "center",
+                }}
+              >
+                <div
+                  style={{
+                    width: 64,
+                    height: 64,
+                    borderRadius: 20,
+                    background: "#E6F7F7",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: 30,
+                    margin: "0 auto 1rem",
+                  }}
+                >
+                  {f.icon}
+                </div>
+                <h3
+                  style={{
+                    fontSize: 15,
+                    fontWeight: 700,
+                    color: "#0A2540",
+                    marginBottom: 8,
+                  }}
+                >
+                  {f.title}
+                </h3>
+                <p style={{ fontSize: 13, color: "#6B7280", lineHeight: 1.6 }}>
+                  {f.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA strip */}
+      <section style={{ background: "#009C9F", padding: "4rem 0" }}>
+        <div className="container" style={{ textAlign: "center" }}>
+          <h2
+            style={{
+              fontSize: 32,
+              fontWeight: 800,
+              color: "#fff",
+              marginBottom: "1rem",
+            }}
+          >
+            Ready to go digital?
+          </h2>
+          <p
+            style={{
+              fontSize: 16,
+              color: "rgba(255,255,255,0.85)",
+              marginBottom: "2rem",
+            }}
+          >
+            Download UCB Mobile App or register for Internet Banking — free for
+            all UCB account holders.
+          </p>
+          <div
+            style={{
+              display: "flex",
+              gap: "1rem",
+              justifyContent: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            <button className="btn-white" style={{ padding: "0.875rem 2rem" }}>
+              Download the App
+            </button>
+            <button
+              className="btn-outline"
+              style={{
+                padding: "0.875rem 2rem",
+                color: "#fff",
+                borderColor: "#fff",
+              }}
+              onClick={() => navigate("login")}
+            >
+              Register for Internet Banking
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}

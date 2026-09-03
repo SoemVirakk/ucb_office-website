@@ -50,7 +50,7 @@ const cols = [
       { label: "Announcements", page: "announcements" as Page },
       { label: "Help & Support", page: "contact" as Page },
       { label: "⚙️ CMS Admin", page: "cms" as Page },
-      { label: "🎨 Design System", page: "design-system" as Page },
+      // { label: "🎨 Design System", page: "design-system" as Page },
     ],
   },
 ]

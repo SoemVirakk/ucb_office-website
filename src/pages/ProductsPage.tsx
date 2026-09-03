@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate as useRouterNavigate } from "react-router-dom"
+import CreditCardProductCard from "../components/cards/CreditCardProductCard"
 import ProductCard from "../components/cards/ProductCard"
 import Breadcrumbs from "../components/ui/Breadcrumbs"
 import FaqAccordion from "../components/ui/FaqAccordion"
 import Badge from "../components/ui/Badge"
+import { mockCreditCards } from "../data/creditCards"
 import { products } from "../data/products"
 import type { Page } from "../types/navigation"
 
@@ -23,6 +25,7 @@ const categories = [
 ]
 
 const categoryIds = categories.map((category) => category.id)
+const specializedCardProductIds = new Set(["credit-card", "debit-card"])
 const getCategoryFromSearch = (search: string) => {
   const requestedCategory = new URLSearchParams(search).get("category")
   return requestedCategory && categoryIds.includes(requestedCategory)
@@ -55,6 +58,29 @@ export default function ProductsPage({
     activeCategory === "all"
       ? products
       : products.filter((p) => p.category === activeCategory)
+  const visibleCreditCards =
+    activeCategory === "all" || activeCategory === "cards" ? mockCreditCards : []
+  const visibleProducts =
+    visibleCreditCards.length > 0
+      ? filtered.filter((product) => !specializedCardProductIds.has(product.id))
+      : filtered
+  const visibleProductCount = visibleProducts.length + visibleCreditCards.length
+  const productCountForCategory = (categoryId: string) => {
+    const categoryProducts =
+      categoryId === "all"
+        ? products
+        : products.filter((product) => product.category === categoryId)
+
+    if (categoryId !== "all" && categoryId !== "cards") {
+      return categoryProducts.length
+    }
+
+    return (
+      categoryProducts.filter(
+        (product) => !specializedCardProductIds.has(product.id),
+      ).length + mockCreditCards.length
+    )
+  }
 
   const selectedProduct = detailId
     ? products.find((p) => p.id === detailId)
@@ -486,9 +512,7 @@ export default function ProductsPage({
                   <span
                     style={{ float: "right", fontSize: 12, color: "#9CA3AF" }}
                   >
-                    {cat.id === "all"
-                      ? products.length
-                      : products.filter((p) => p.category === cat.id).length}
+                    {productCountForCategory(cat.id)}
                   </span>
                 </button>
               ))}
@@ -506,8 +530,8 @@ export default function ProductsPage({
               }}
             >
               <div style={{ fontSize: 14, color: "#6B7280" }}>
-                Showing <strong>{filtered.length}</strong> product
-                {filtered.length !== 1 ? "s" : ""}
+                Showing <strong>{visibleProductCount}</strong> product
+                {visibleProductCount !== 1 ? "s" : ""}
               </div>
             </div>
             <div
@@ -518,12 +542,15 @@ export default function ProductsPage({
                 gap: "1.25rem",
               }}
             >
-              {filtered.map((p) => (
+              {visibleProducts.map((p) => (
                 <ProductCard
                   key={p.id}
                   product={p}
                   onSelect={(id) => setDetailId(id)}
                 />
+              ))}
+              {visibleCreditCards.map((product) => (
+                <CreditCardProductCard key={product.id} product={product} />
               ))}
             </div>
           </div>

@@ -19,6 +19,8 @@ interface HeaderDropdownProps {
 
   labelKm?: string
 
+  labelZh?: string
+
   links: DropdownLink[]
 
   active: boolean

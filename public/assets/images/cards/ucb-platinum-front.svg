@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="454" viewBox="0 0 720 454" role="img" aria-labelledby="title desc">
+  <title id="title">UCB Platinum Credit Card front artwork</title>
+  <desc id="desc">Generic UCB credit card front design without real cardholder or payment data.</desc>
+  <defs>
+    <linearGradient id="front-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0A2540"/>
+      <stop offset="0.48" stop-color="#123B5C"/>
+      <stop offset="1" stop-color="#009C9F"/>
+    </linearGradient>
+    <linearGradient id="chip" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F6D985"/>
+      <stop offset="1" stop-color="#B98D25"/>
+    </linearGradient>
+  </defs>
+  <rect width="720" height="454" rx="36" fill="url(#front-bg)"/>
+  <path d="M0 306C118 252 204 282 312 332C446 394 570 382 720 296V454H0Z" fill="#E6F7F7" opacity="0.12"/>
+  <path d="M470 0C420 82 436 176 512 238C584 296 654 302 720 280V0Z" fill="#FFFFFF" opacity="0.08"/>
+  <text x="52" y="76" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="800">UCB</text>
+  <text x="52" y="108" fill="#D8F7F7" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="600">PLATINUM CREDIT CARD</text>
+  <rect x="52" y="154" width="92" height="68" rx="12" fill="url(#chip)"/>
+  <path d="M76 154V222M120 154V222M52 178H144M52 202H144" stroke="#6E5518" stroke-width="3" opacity="0.48"/>
+  <path d="M558 76C558 58 572 44 590 44C608 44 622 58 622 76C622 94 608 108 590 108C572 108 558 94 558 76Z" fill="#FFFFFF" opacity="0.82"/>
+  <path d="M598 76C598 58 612 44 630 44C648 44 662 58 662 76C662 94 648 108 630 108C612 108 598 94 598 76Z" fill="#E6F7F7" opacity="0.72"/>
+  <text x="52" y="296" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="5">CARD ARTWORK</text>
+  <text x="52" y="348" fill="#D8F7F7" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="600">SECURE PAYMENTS</text>
+  <text x="52" y="382" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">UCB CUSTOMER</text>
+  <text x="520" y="382" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">VALID CARD</text>
+</svg>

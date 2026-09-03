@@ -261,7 +261,15 @@ export default function Footer({ navigate }: FooterProps) {
                   textDecoration: "none",
                 }}
               >
-                <span style={{ fontSize: 18 }}>🍎</span>
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                >
+                  <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-.99-.46-2.08-.48-3.12 0-1.3.6-1.99.43-2.87-.35C3.79 15.25 4.51 7.59 9.05 7.31c1.1.06 1.87.61 2.53.66.99-.2 1.94-.77 3-.7 1.27.1 2.23.61 2.86 1.51-2.64 1.58-2.02 5.05.41 6.02-.49 1.29-1.13 2.58-2.05 3.49l1.25 1.99ZM12.03 7.25C11.88 4.87 13.8 2.92 16.05 2.8c.31 2.73-2.48 4.77-4.02 4.45Z" />
+                </svg>
                 <div>
                   <div
                     style={{
@@ -290,7 +298,17 @@ export default function Footer({ navigate }: FooterProps) {
                   textDecoration: "none",
                 }}
               >
-                <span style={{ fontSize: 18 }}>▶</span>
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                >
+                  <path fill="#fff" d="M3.18 1.04A1.99 1.99 0 0 0 2 2.95v18.1c0 .78.45 1.49 1.18 1.91L13.3 12 3.18 1.04Z" />
+                  <path fill="#d7f9df" d="m14.05 12.8 2.75 2.98-9.92 5.7a2.1 2.1 0 0 1-1.8.13l8.97-8.81Z" />
+                  <path fill="#e8f7ff" d="m14.05 11.2 2.75-2.98-9.92-5.7a2.1 2.1 0 0 0-1.8-.13l8.97 8.81Z" />
+                  <path fill="#b8f0c8" d="m17.72 15.78 2.48-1.42c.98-.56.98-1.98 0-2.54l-2.48-1.42L14.7 12l3.02 3.78Z" />
+                </svg>
                 <div>
                   <div
                     style={{

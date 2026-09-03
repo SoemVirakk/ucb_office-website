@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useLocation, useNavigate as useRouterNavigate } from "react-router-dom"
 import HeaderDropdown from "./HeaderDropdown"
 import type { LocaleCode } from "../../types/localization"
@@ -12,19 +12,28 @@ interface HeaderProps {
   onSearch: (q: string) => void
 }
 
-const navLinks: { label: string labelKm: string labelZh: string page: Page }[] =
-  [
+type HeaderNavLink = {
+  label: string
+  labelKm: string
+  labelZh: string
+  page: Page
+  productCategory?: "personal" | "business"
+}
+
+const navLinks: HeaderNavLink[] = [
     {
       label: "Personal",
       labelKm: "ផ្ទាល់ខ្លួន",
       labelZh: "个人业务",
       page: "products",
+      productCategory: "personal",
     },
     {
       label: "Business",
       labelKm: "អាជីវកម្ម",
       labelZh: "企业业务",
       page: "products",
+      productCategory: "business",
     },
     {
       label: "Digital Banking",
@@ -32,7 +41,6 @@ const navLinks: { label: string labelKm: string labelZh: string page: Page }[] =
       labelZh: "数字银行",
       page: "digital-banking",
     },
-    { label: "Rates", labelKm: "អត្រា", labelZh: "汇率", page: "rates" },
     {
       label: "Help & Support",
       labelKm: "ជំនួយ",
@@ -63,6 +71,13 @@ const navItemWidths: Record<Page, number> = {
   maintenance: 120,
   "design-review": 130,
 }
+
+const languageOptions: { code: LocaleCode; label: string; shortLabel: string }[] =
+  [
+    { code: "en", label: "English", shortLabel: "EN" },
+    { code: "km", label: "Khmer", shortLabel: "ខ្មែរ" },
+    { code: "zh-CN", label: "Chinese", shortLabel: "中文" },
+  ]
 
 const aboutLinks = [
   {
@@ -134,6 +149,8 @@ export default function Header({
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchVal, setSearchVal] = useState("")
   const [newsMenuOpen, setNewsMenuOpen] = useState(false)
+  const [languageMenuOpen, setLanguageMenuOpen] = useState(false)
+  const languageMenuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : ""
@@ -151,7 +168,46 @@ export default function Header({
     return () => document.removeEventListener("keydown", closeMenuOnEscape)
   }, [menuOpen])
 
+  useEffect(() => {
+    if (!languageMenuOpen) return
+    const closeLanguageMenu = (event: MouseEvent | KeyboardEvent) => {
+      if (event instanceof KeyboardEvent) {
+        if (event.key === "Escape") setLanguageMenuOpen(false)
+        return
+      }
+
+      if (!languageMenuRef.current?.contains(event.target as Node)) {
+        setLanguageMenuOpen(false)
+      }
+    }
+
+    document.addEventListener("mousedown", closeLanguageMenu)
+    document.addEventListener("keydown", closeLanguageMenu)
+    return () => {
+      document.removeEventListener("mousedown", closeLanguageMenu)
+      document.removeEventListener("keydown", closeLanguageMenu)
+    }
+  }, [languageMenuOpen])
+
+  const currentProductCategory = new URLSearchParams(location.search).get(
+    "category",
+  )
   const isActive = (p: Page) => page === p
+  const isNavLinkActive = (link: HeaderNavLink) => {
+    if (link.productCategory) {
+      return page === "products" && currentProductCategory === link.productCategory
+    }
+    return isActive(link.page)
+  }
+  const handleNavLinkClick = (link: HeaderNavLink) => {
+    if (link.productCategory) {
+      routerNavigate(`/products?category=${link.productCategory}`)
+      window.scrollTo({ top: 0, behavior: "smooth" })
+      return
+    }
+
+    navigate(link.page)
+  }
 
   const handleSearchSubmit = () => {
     if (searchVal.trim()) {
@@ -237,14 +293,14 @@ export default function Header({
           {navLinks.map((link) => (
             <button
               key={link.label}
-              onClick={() => navigate(link.page)}
+              onClick={() => handleNavLinkClick(link)}
               className="btn-ghost"
               style={{
                 fontSize: 14,
                 fontWeight:
-                  isActive(link.page) && link.page !== "home" ? 600 : 500,
+                  isNavLinkActive(link) && link.page !== "home" ? 600 : 500,
                 color:
-                  isActive(link.page) && link.page !== "home"
+                  isNavLinkActive(link) && link.page !== "home"
                     ? "#009C9F"
                     : "#0A2540",
                 padding: "0.5rem 0.75rem",
@@ -498,30 +554,85 @@ export default function Header({
             </button>
           )}
 
-          <button
-            onClick={() =>
-              onLangChange(
-                lang === "en" ? "km" : lang === "km" ? "zh-CN" : "en",
-              )
-            }
-            style={{
-              background: "#F4F6F8",
-              border: "none",
-              borderRadius: 6,
-              padding: "5px 10px",
-              width: 48,
-              fontSize: 12,
-              fontWeight: 600,
-              color: "#0A2540",
-              cursor: "pointer",
-              letterSpacing: 0.5,
-            }}
-            aria-label={`Switch to ${
-              lang === "en" ? "Khmer" : lang === "km" ? "Chinese" : "English"
-            }`}
+          <div
+            ref={languageMenuRef}
+            style={{ position: "relative", flex: "0 0 auto" }}
           >
-            {lang === "en" ? "ខ្មែរ" : lang === "km" ? "中文" : "EN"}
-          </button>
+            <button
+              onClick={() => setLanguageMenuOpen((open) => !open)}
+              style={{
+                background: "#F4F6F8",
+                border: "none",
+                borderRadius: 6,
+                padding: "5px 10px",
+                width: 48,
+                fontSize: 12,
+                fontWeight: 600,
+                color: "#0A2540",
+                cursor: "pointer",
+                letterSpacing: 0.5,
+              }}
+              aria-label="Select language"
+              aria-haspopup="menu"
+              aria-expanded={languageMenuOpen}
+            >
+              {languageOptions.find((option) => option.code === lang)?.shortLabel}
+            </button>
+
+            {languageMenuOpen && (
+              <div
+                role="menu"
+                aria-label="Language selector"
+                style={{
+                  position: "absolute",
+                  top: "calc(100% + 8px)",
+                  right: 0,
+                  zIndex: 50,
+                  minWidth: 144,
+                  padding: 6,
+                  background: "#FFFFFF",
+                  border: "1px solid #E5E7EB",
+                  borderRadius: 8,
+                  boxShadow: "0 12px 28px rgba(10, 37, 64, 0.16)",
+                }}
+              >
+                {languageOptions.map((option) => (
+                  <button
+                    key={option.code}
+                    type="button"
+                    role="menuitemradio"
+                    aria-checked={lang === option.code}
+                    onClick={() => {
+                      onLangChange(option.code)
+                      setLanguageMenuOpen(false)
+                    }}
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: 12,
+                      border: "none",
+                      borderRadius: 6,
+                      padding: "8px 10px",
+                      background:
+                        lang === option.code ? "#F4F6F8" : "transparent",
+                      color: "#0A2540",
+                      cursor: "pointer",
+                      fontSize: 13,
+                      fontWeight: lang === option.code ? 700 : 500,
+                      textAlign: "left",
+                    }}
+                  >
+                    <span>{option.label}</span>
+                    <span style={{ fontSize: 12, fontWeight: 700 }}>
+                      {option.shortLabel}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
           <button
             className="btn-primary header-login-action"
@@ -640,7 +751,7 @@ export default function Header({
             <button
               key={link.label}
               onClick={() => {
-                navigate(link.page)
+                handleNavLinkClick(link)
                 setMenuOpen(false)
               }}
               style={{
@@ -651,9 +762,9 @@ export default function Header({
                 border: "none",
                 padding: "0.875rem 0",
                 fontSize: 16,
-                fontWeight: isActive(link.page) ? 600 : 500,
+                fontWeight: isNavLinkActive(link) ? 600 : 500,
                 color:
-                  isActive(link.page) && link.page !== "home"
+                  isNavLinkActive(link) && link.page !== "home"
                     ? "#009C9F"
                     : "#0A2540",
                 borderBottom: "1px solid #F4F6F8",

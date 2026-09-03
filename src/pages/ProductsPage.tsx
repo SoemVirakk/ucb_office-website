@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useLocation, useNavigate as useRouterNavigate } from "react-router-dom"
 import ProductCard from "../components/cards/ProductCard"
 import Breadcrumbs from "../components/ui/Breadcrumbs"
 import FaqAccordion from "../components/ui/FaqAccordion"
@@ -21,12 +22,34 @@ const categories = [
   { id: "business", label: "Business Banking" },
 ]
 
+const categoryIds = categories.map((category) => category.id)
+const getCategoryFromSearch = (search: string) => {
+  const requestedCategory = new URLSearchParams(search).get("category")
+  return requestedCategory && categoryIds.includes(requestedCategory)
+    ? requestedCategory
+    : "all"
+}
+
 export default function ProductsPage({
   navigate,
   detailId,
   setDetailId,
 }: ProductsPageProps) {
-  const [activeCategory, setActiveCategory] = useState("all")
+  const location = useLocation()
+  const routerNavigate = useRouterNavigate()
+  const [activeCategory, setActiveCategory] = useState(() =>
+    getCategoryFromSearch(location.search),
+  )
+
+  useEffect(() => {
+    setActiveCategory(getCategoryFromSearch(location.search))
+  }, [location.search])
+
+  const handleCategoryChange = (categoryId: string) => {
+    setActiveCategory(categoryId)
+    const query = categoryId === "all" ? "" : `?category=${categoryId}`
+    routerNavigate(`/products${query}`, { replace: true })
+  }
 
   const filtered =
     activeCategory === "all"
@@ -441,7 +464,7 @@ export default function ProductsPage({
               {categories.map((cat) => (
                 <button
                   key={cat.id}
-                  onClick={() => setActiveCategory(cat.id)}
+                  onClick={() => handleCategoryChange(cat.id)}
                   style={{
                     display: "block",
                     width: "100%",

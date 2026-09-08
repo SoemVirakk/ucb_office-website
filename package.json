@@ -1,12 +1,12 @@
 {
-  "name": "figma-make-app",
+  "name": "ucb_officewebsite",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "postbuild": "node -e \"import('node:fs').then(fs => fs.copyFileSync('dist/index.html', 'dist/404.html'))\"",
+    "postbuild": "node scripts/create-gh-pages-404.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "format": "oxfmt",

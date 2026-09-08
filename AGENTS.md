@@ -1,4 +1,4 @@
-# figma-make-app
+# ucb_officewebsite
 
 React + Vite + Tailwind CSS project running inside Figma Make.
 

@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
   const emitSourcemaps = mode === "development"
 
   return {
-    base: "/ucb_office-website/",
+    base: "/digital-banking/",
     build: {
       sourcemap: emitSourcemaps ? "inline" : false,
       minify: !emitSourcemaps,

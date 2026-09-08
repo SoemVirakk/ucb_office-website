@@ -1,6 +1,6 @@
 import { writeFileSync } from "node:fs"
 
-const siteBasePath = "/ucb_office-website/"
+const siteBasePath = "/digital-banking/"
 
 const fallbackHtml = `<!doctype html>
 <html lang="en">

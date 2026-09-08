@@ -138,6 +138,11 @@ export default function ProductsPage({
     ? products.find((p) => p.id === detailId)
     : null
 
+  /** Routes product applications through the existing online-services flow. */
+  const handleApply = () => {
+    routerNavigate("/online-services")
+  }
+
   if (selectedProduct) {
     return (
       <div style={{ background: "#F4F6F8", minHeight: "100vh" }}>
@@ -193,7 +198,7 @@ export default function ProductsPage({
             <button
               type="button"
               className="btn-outline"
-              onClick={() => navigate("/contact")}
+              onClick={() => navigate("contact")}
             >
               Talk to Us
             </button>

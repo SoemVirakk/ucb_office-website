@@ -1,4 +1,5 @@
 import { ArrowRight, ChevronRight } from "lucide-react"
+import { publicAsset } from "../../utils/assets"
 
 /** Renders the decorative business growth chart used by the Business Banking hero. */
 function BusinessGrowthGraphic() {
@@ -66,15 +67,25 @@ export default function PageHero({
   const finalIndex = breadcrumbs.length - 1
   const isBusinessHero = variant === "business"
   const isPersonalHero = variant === "personal"
+  const heroImage = isBusinessHero
+    ? publicAsset("assets/images/heroes/business-banking-hero.jpg")
+    : isPersonalHero
+      ? publicAsset("assets/images/heroes/personal-banking-hero.jpg")
+      : undefined
 
   return (
     <section
       className={`page-hero${isBusinessHero ? " page-hero--business" : ""}${isPersonalHero ? " page-hero--personal" : ""}`}
       aria-labelledby="page-hero-title"
+      style={heroImage ? { "--page-hero-bg-image": `url("${heroImage}")` } : undefined}
     >
       {isPersonalHero && <div className="page-hero__overlay" aria-hidden="true" />}
 
-      {isBusinessHero &&  <div className="page-hero__visual" aria-hidden="true" />}
+      {isBusinessHero && (
+        <div className="page-hero__visual" aria-hidden="true">
+          <BusinessGrowthGraphic />
+        </div>
+      )}
 
       <div className="container page-hero__container">
         <nav className="page-hero__breadcrumb" aria-label="Breadcrumb">

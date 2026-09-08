@@ -345,7 +345,7 @@ export default function ProductsPage({
         </div>
       )}
 
-      <div className="container" style={{ padding: "2.5rem 1.5rem" }}>
+      <div className="container" style={{ padding: "3rem 1.5rem 2.5rem" }}>
         <div
           className="sidebar-layout"
           

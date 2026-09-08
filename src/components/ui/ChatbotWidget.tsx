@@ -960,7 +960,8 @@ export default function ChatbotWidget({ navigate, lang }: ChatbotWidgetProps) {
             height: 88dvh !important;
             max-height: 88dvh !important;
           }
-          .ucb-launcher { bottom: 16px !important; right: 16px !important; }
+          .ucb-launcher { bottom: 80px !important; right: 16px !important; }
+          .ucb-launcher-tooltip { display: none !important; }
         }
       `}</style>
 
@@ -1028,6 +1029,7 @@ export default function ChatbotWidget({ navigate, lang }: ChatbotWidgetProps) {
       {/* Tooltip */}
       {(!open || minimized) && (
         <div
+          className="ucb-launcher-tooltip"
           style={{
             position: "fixed",
             bottom: 92,

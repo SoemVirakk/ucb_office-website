@@ -4,6 +4,15 @@
     
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (function () {
+        var redirect = sessionStorage.redirect
+        delete sessionStorage.redirect
+        if (redirect && redirect !== location.href) {
+          history.replaceState(null, null, redirect)
+        }
+      })()
+    </script>
     <title>ucb_officewebsite</title>
     
     <meta name="description" content="Union Commercial Bank&#39;s website offers a modern, user-friendly platform for Cambodian customers to manage banking services, access products, and receive support.">

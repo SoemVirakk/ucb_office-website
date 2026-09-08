@@ -3,6 +3,7 @@ import {
   exchangeRateTickerMock,
   tickerCurrencies,
 } from "../../data/exchangeRateTickerMock"
+import { isGithubPagesHost, siteHref } from "../../utils/assets"
 import "./ExchangeRateTicker.css"
 
 const EXCHANGE_RATES_URL = "/api/v1/public/exchange-rates"
@@ -95,6 +96,8 @@ export default function ExchangeRateTicker() {
 
     async function loadRates() {
       try {
+        if (isGithubPagesHost()) return
+
         const response = await fetch(EXCHANGE_RATES_URL, {
           signal: controller.signal,
           headers: { Accept: "application/json" },
@@ -151,7 +154,7 @@ export default function ExchangeRateTicker() {
 
   return (
     <a
-      href="/exchange-rates"
+      href={siteHref("/exchange-rates")}
       className="exchange-rate-ticker"
       aria-label={`Exchange rate ${rate.currency}. Buy ${buy}. Sell ${sell}. View exchange rates`}
       onMouseEnter={() => setPaused(true)}

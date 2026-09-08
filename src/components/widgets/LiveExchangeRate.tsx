@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { getUsdQuoteExchangeRate } from "../../services/exchangeRatesApi"
+import { isGithubPagesHost, siteHref } from "../../utils/assets"
 
 type RateStatus = "loading" | "live" | "stale"
 type QuoteCode = "KHR" | "EUR" | "THB" | "CNY" | "SGD" | "GBP" | "JPY"
@@ -31,6 +32,11 @@ export default function LiveExchangeRate() {
     let mounted = true
 
     const loadRate = async (quote: QuoteCode) => {
+      if (isGithubPagesHost()) {
+        setStatus("stale")
+        return
+      }
+
       if (loadingRef.current) return
       loadingRef.current = true
       abortRef.current?.abort()
@@ -79,7 +85,7 @@ export default function LiveExchangeRate() {
   return (
     <>
       <a
-        href="/exchange-rates"
+        href={siteHref("/exchange-rates")}
         aria-label={label}
         className="live-exchange-rate"
         style={{

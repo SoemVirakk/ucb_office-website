@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { Minus, TrendingDown, TrendingUp } from "lucide-react"
-import { publicAsset } from "../../utils/assets"
+import { isGithubPagesHost, publicAsset, siteHref } from "../../utils/assets"
 
 interface ExchangeRateWidgetProps {
   compact?: boolean
@@ -192,6 +192,12 @@ export default function ExchangeRateWidget({
 
     async function loadRates() {
       try {
+        if (isGithubPagesHost()) {
+          setHasError(false)
+          setLoading(false)
+          return
+        }
+
         if (lastSuccessfulRatesRef.current.length === 0) setLoading(true)
         const response = await fetch(EXCHANGE_RATES_URL, {
           signal: controller.signal,
@@ -248,7 +254,7 @@ export default function ExchangeRateWidget({
           </h3>
         </div>
         <a
-          href="/exchange-rates"
+          href={siteHref("/exchange-rates")}
           className="exchange-rate-card__link"
           aria-label="View all exchange rates"
         >

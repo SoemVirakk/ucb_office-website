@@ -7,6 +7,7 @@ interface PaginationProps {
   onChange: (n: number) => void
 }
 
+/** Renders accessible pagination controls. */
 export default function Pagination({
   total,
   perPage,
@@ -16,6 +17,7 @@ export default function Pagination({
   const pages = Math.ceil(total / perPage)
   if (pages <= 1) return null
 
+  /** Calculates the compact pagination window around the current page. */
   const getPages = () => {
     const arr: (number | "...")[] = []
     for (let i = 1; i <= pages; i++) {

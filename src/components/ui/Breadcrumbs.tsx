@@ -10,6 +10,7 @@ interface BreadcrumbsProps {
   navigate?: (p: Page) => void
 }
 
+/** Renders breadcrumb navigation for nested pages. */
 export default function Breadcrumbs({ crumbs, navigate }: BreadcrumbsProps) {
   return (
     <nav aria-label="Breadcrumb">

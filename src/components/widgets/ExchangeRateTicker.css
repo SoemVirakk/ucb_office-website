@@ -1,0 +1,169 @@
+.exchange-rate-ticker {
+  position: absolute;
+  top: 18px;
+  right: 24px;
+  z-index: 4;
+  display: inline-flex;
+  width: min(300px, calc(100% - 48px));
+  max-width: 300px;
+  height: 32px;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+  padding-left: 12px;
+  border-left: 2px solid rgba(0, 156, 159, 0.72);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.exchange-rate-ticker:focus-visible {
+  outline: 2px solid #009c9f;
+  outline-offset: 4px;
+}
+
+.exchange-rate-ticker__label,
+.exchange-rate-ticker__mobile-arrow {
+  color: #009c9f;
+}
+
+.exchange-rate-ticker__separator {
+  color: rgba(255, 255, 255, 0.44);
+}
+
+.exchange-rate-ticker__viewport {
+  display: inline-flex;
+  min-width: 214px;
+  height: 18px;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+.exchange-rate-ticker__rate {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  animation: ticker-rate-in 280ms ease both;
+}
+
+.exchange-rate-ticker__rate--up {
+  animation-name: ticker-rate-up-in;
+}
+
+.exchange-rate-ticker__rate--down {
+  animation-name: ticker-rate-down-in;
+}
+
+.exchange-rate-ticker__flag {
+  display: block;
+  width: 18px;
+  height: 12px;
+  flex: 0 0 auto;
+  object-fit: cover;
+}
+
+.exchange-rate-ticker__currency,
+.exchange-rate-ticker__value {
+  color: #fff;
+}
+
+.exchange-rate-ticker__movement {
+  font-size: 13px;
+}
+
+.exchange-rate-ticker__movement--up {
+  color: #22c55e;
+}
+
+.exchange-rate-ticker__movement--down {
+  color: #ef4444;
+}
+
+.exchange-rate-ticker__movement--same {
+  color: #9ca3af;
+}
+
+.exchange-rate-ticker__mobile-arrow {
+  display: none;
+}
+
+@keyframes ticker-rate-in {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ticker-rate-up-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ticker-rate-down-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exchange-rate-ticker__rate {
+    animation: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .exchange-rate-ticker {
+    top: 14px;
+    right: 16px;
+    width: auto;
+    max-width: calc(100% - 32px);
+    height: 28px;
+    gap: 6px;
+    padding-left: 10px;
+    font-size: 12px;
+  }
+
+  .exchange-rate-ticker__label,
+  .exchange-rate-ticker__separator,
+  .exchange-rate-ticker__buy,
+  .exchange-rate-ticker__movement {
+    display: none;
+  }
+
+  .exchange-rate-ticker__viewport {
+    min-width: 0;
+    height: 18px;
+  }
+
+  .exchange-rate-ticker__rate {
+    gap: 6px;
+  }
+
+  .exchange-rate-ticker__flag {
+    width: 18px;
+    height: 12px;
+  }
+
+  .exchange-rate-ticker__mobile-arrow {
+    display: inline;
+  }
+}

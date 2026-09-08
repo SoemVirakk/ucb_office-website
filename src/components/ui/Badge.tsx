@@ -12,6 +12,7 @@ const variantStyles: Record<string, { bg: string color: string }> = {
   navy: { bg: "#EDF2FB", color: "#1A3D5C" },
 }
 
+/** Renders a small semantic badge. */
 export default function Badge({ label, variant = "teal" }: BadgeProps) {
   const s = variantStyles[variant] ?? variantStyles.teal
   return (

@@ -1,13 +1,24 @@
 /* Loading, Empty, and Error state components */
 
+/** Renders a full-page loading state. */
 export function PageLoader({ message }: { message: string }) {
   return (
-    <div role="status" aria-live="polite" style={{ minHeight: "50vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div
+      role="status"
+      aria-live="polite"
+      style={{
+        minHeight: "50vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <LoadingState message={message} />
     </div>
   )
 }
 
+/** Renders a compact section loading state. */
 export function SectionLoader({ message }: { message: string }) {
   return (
     <div role="status" aria-live="polite">
@@ -16,6 +27,7 @@ export function SectionLoader({ message }: { message: string }) {
   )
 }
 
+/** Renders spinner text for loading buttons. */
 export function ButtonLoadingState({ label }: { label: string }) {
   return (
     <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
@@ -25,28 +37,45 @@ export function ButtonLoadingState({ label }: { label: string }) {
   )
 }
 
+/** Renders a generic card skeleton placeholder. */
 export function CardSkeleton({ lines = 3 }: { lines?: number }) {
   return (
     <div className="card-skeleton skeleton" aria-hidden="true">
       <div className="card-skeleton-icon" />
       <div className="card-skeleton-line card-skeleton-line-wide" />
-      {Array.from({ length: lines }, (_, index) => <div key={index} className="card-skeleton-line" />)}
+      {Array.from({ length: lines }, (_, index) => (
+        <div key={index} className="card-skeleton-line" />
+      ))}
     </div>
   )
 }
 
-export function TableSkeleton({ rows = 5, columns = 4 }: { rows?: number; columns?: number }) {
+/** Renders a generic table skeleton placeholder. */
+export function TableSkeleton({
+  rows = 5,
+  columns = 4,
+}: {
+  rows?: number
+  columns?: number
+}) {
   return (
-    <div className="table-skeleton skeleton" role="status" aria-label="Loading table">
+    <div
+      className="table-skeleton skeleton"
+      role="status"
+      aria-label="Loading table"
+    >
       {Array.from({ length: rows }, (_, row) => (
         <div key={row} className="table-skeleton-row">
-          {Array.from({ length: columns }, (_, column) => <span key={column} />)}
+          {Array.from({ length: columns }, (_, column) => (
+            <span key={column} />
+          ))}
         </div>
       ))}
     </div>
   )
 }
 
+/** Renders a configurable loading state. */
 export function LoadingState({ message = "Loading..." }: { message?: string }) {
   return (
     <div
@@ -77,6 +106,7 @@ export function LoadingState({ message = "Loading..." }: { message?: string }) {
   )
 }
 
+/** Renders an empty-result state with optional action. */
 export function EmptyState({
   icon = "📭",
   title = "Nothing here yet",
@@ -86,7 +116,7 @@ export function EmptyState({
   icon?: string
   title?: string
   description?: string
-  action?: { label: string; onClick: () => void }
+  action?: { label: string onClick: () => void }
 }) {
   return (
     <div
@@ -151,6 +181,7 @@ export function EmptyState({
   )
 }
 
+/** Renders an error state with optional retry action. */
 export function ErrorState({
   title = "Something went wrong",
   description = "We encountered an error loading this content. Please try again.",
@@ -221,6 +252,7 @@ export function ErrorState({
   )
 }
 
+/** Renders a skeleton card with configurable line count. */
 export function SkeletonCard() {
   return (
     <div

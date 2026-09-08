@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
+import { useNavigate as useRouterNavigate } from "react-router-dom"
 import { news, type NewsItem } from "../data/news"
 import type { Page } from "../types/navigation"
 
@@ -29,6 +30,7 @@ const categories: { id: NewsCategory label: string icon: string }[] = [
 
 const PER_PAGE = 6
 
+/** Formats a date string for human-readable public content display. */
 function formatDate(d: string) {
   return new Date(d).toLocaleDateString("en-GB", {
     day: "numeric",
@@ -37,19 +39,23 @@ function formatDate(d: string) {
   })
 }
 
+/** Maps a news category key to its display label. */
 function getCategoryLabel(cat: string): string {
   const found = categories.find((c) => c.id === cat)
   return found ? found.label : cat
 }
 
+/** Normalizes news category values for filter grouping. */
 function getMappedCategory(item: NewsItem): NewsCategory {
   return categoryMap[item.category] || "bank-news"
 }
 
+/** Renders news filters, listing cards, and detail content. */
 export default function NewsPage({
   navigate,
   initialArticleId,
 }: NewsPageProps) {
+  const routerNavigate = useRouterNavigate()
   const [activeCategory, setActiveCategory] = useState<NewsCategory>("all")
   const [search, setSearch] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
@@ -59,6 +65,14 @@ export default function NewsPage({
       : null,
   )
   const [copied, setCopied] = useState(false)
+
+  useEffect(() => {
+    setSelectedArticle(
+      initialArticleId
+        ? (news.find((item) => item.id === initialArticleId) ?? null)
+        : null,
+    )
+  }, [initialArticleId])
 
   const filteredNews = useMemo(() => {
     return news.filter((item) => {
@@ -79,12 +93,26 @@ export default function NewsPage({
   const totalPages = Math.ceil(filteredNews.length / PER_PAGE)
   const featured = news[0]
 
+  /** Changes the active news category filter and closes the selected article. */
   const handleCatChange = (cat: NewsCategory) => {
     setActiveCategory(cat)
     setCurrentPage(1)
     setSearch("")
   }
 
+  /** Opens a news detail view and mirrors it into the browser URL. */
+  const openArticle = (article: NewsItem) => {
+    setSelectedArticle(article)
+    routerNavigate(`/news/${encodeURIComponent(article.id)}`)
+  }
+
+  /** Returns from a news detail URL to the list route. */
+  const closeArticle = () => {
+    setSelectedArticle(null)
+    routerNavigate("/news")
+  }
+
+  /** Copies or falls back to showing the current news article URL. */
   const handleShare = () => {
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
@@ -109,7 +137,7 @@ export default function NewsPage({
         >
           <div className="container" style={{ maxWidth: 860 }}>
             <button
-              onClick={() => setSelectedArticle(null)}
+              onClick={closeArticle}
               style={{
                 background: "none",
                 border: "none",
@@ -319,8 +347,7 @@ export default function NewsPage({
                   <button
                     key={item.id}
                     onClick={() => {
-                      setSelectedArticle(item)
-                      window.scrollTo({ top: 0, behavior: "smooth" })
+                      openArticle(item)
                     }}
                     style={{
                       textAlign: "left",
@@ -430,7 +457,7 @@ export default function NewsPage({
       {featured && (
         <div className="container" style={{ padding: "2rem 1.5rem 0" }}>
           <button
-            onClick={() => setSelectedArticle(featured)}
+            onClick={() => openArticle(featured)}
             style={{
               display: "block",
               width: "100%",
@@ -637,7 +664,7 @@ export default function NewsPage({
               {paged.map((item) => (
                 <button
                   key={item.id}
-                  onClick={() => setSelectedArticle(item)}
+                  onClick={() => openArticle(item)}
                   style={{
                     textAlign: "left",
                     background: "#fff",

@@ -1,182 +1,336 @@
-import { exchangeRates } from "../../data/exchangeRates"
+import { useEffect, useRef, useState } from "react"
+import { Minus, TrendingDown, TrendingUp } from "lucide-react"
 
 interface ExchangeRateWidgetProps {
   compact?: boolean
 }
 
-export default function ExchangeRateWidget({
-  compact = false,
-}: ExchangeRateWidgetProps) {
-  const lastUpdated = new Date(exchangeRates.lastUpdated).toLocaleString(
-    "en-GB",
+type ExchangeRateDirection = "up" | "down" | "same" | "new"
+
+type ApiExchangeRate = {
+  code: string
+  name: string
+  flag: string
+  buy: number
+  sell: number
+  decimals: number
+}
+
+type ExchangeRateResponse = {
+  lastUpdated: string
+  rates: ApiExchangeRate[]
+}
+
+type RateWithDirection = ApiExchangeRate & {
+  buyDirection: ExchangeRateDirection
+  sellDirection: ExchangeRateDirection
+}
+
+type RateValueProps = {
+  value: number
+  decimals: number
+  direction: ExchangeRateDirection
+  label: string
+}
+
+const EXCHANGE_RATES_URL = "/api/v1/public/exchange-rates"
+const REFRESH_INTERVAL_MS = 60_000
+const MOCK_EXCHANGE_RATES: ExchangeRateResponse = {
+  lastUpdated: "2026-09-05T11:00:00+07:00",
+  rates: [
     {
-      day: "numeric",
+      code: "USD",
+      name: "US Dollar",
+      flag: "/assets/images/flags/us.svg",
+      buy: 4080,
+      sell: 4100,
+      decimals: 0,
+    },
+    {
+      code: "THB",
+      name: "Thai Baht",
+      flag: "/assets/images/flags/th.svg",
+      buy: 34.2,
+      sell: 34.8,
+      decimals: 3,
+    },
+    {
+      code: "CNY",
+      name: "Chinese Yuan",
+      flag: "/assets/images/flags/cn.svg",
+      buy: 7.1,
+      sell: 7.18,
+      decimals: 3,
+    },
+    {
+      code: "JPY",
+      name: "Japanese Yen",
+      flag: "/assets/images/flags/jp.svg",
+      buy: 147.2,
+      sell: 149.8,
+      decimals: 3,
+    },
+    {
+      code: "EUR",
+      name: "Euro",
+      flag: "/assets/images/flags/eu.svg",
+      buy: 1.085,
+      sell: 1.095,
+      decimals: 3,
+    },
+  ],
+}
+const MOCK_PREVIOUS_EXCHANGE_RATES: ApiExchangeRate[] =
+  MOCK_EXCHANGE_RATES.rates.map((rate, index) => ({
+    ...rate,
+    buy:
+      index % 2 === 0
+        ? Number((rate.buy - 0.01 * Math.max(1, rate.buy)).toFixed(rate.decimals))
+        : Number((rate.buy + 0.01 * Math.max(1, rate.buy)).toFixed(rate.decimals)),
+    sell:
+      index % 2 === 0
+        ? Number((rate.sell - 0.01 * Math.max(1, rate.sell)).toFixed(rate.decimals))
+        : Number((rate.sell + 0.01 * Math.max(1, rate.sell)).toFixed(rate.decimals)),
+  }))
+
+function directionFor(
+  nextValue: number,
+  previousValue: number | undefined,
+): ExchangeRateDirection {
+  if (previousValue === undefined) return "new"
+  if (nextValue > previousValue) return "up"
+  if (nextValue < previousValue) return "down"
+  return "same"
+}
+
+function formatRate(value: number, decimals: number) {
+  return value.toLocaleString("en-US", {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  })
+}
+
+function formatLastUpdated(timestamp: string) {
+  const date = new Date(timestamp)
+  if (Number.isNaN(date.getTime())) return timestamp
+
+  return date
+    .toLocaleString("en-GB", {
+      day: "2-digit",
       month: "short",
       year: "numeric",
       hour: "2-digit",
       minute: "2-digit",
-      timeZoneName: "short",
-    },
-  )
+      hour12: false,
+      timeZone: "Asia/Phnom_Penh",
+    })
+    .replace(",", "")
+    .replace("Sept", "Sep") + " GMT+7"
+}
 
-  const displayRates = compact
-    ? exchangeRates.rates.slice(0, 5)
-    : exchangeRates.rates
+function RateValue({ value, decimals, direction, label }: RateValueProps) {
+  const formatted = formatRate(value, decimals)
+  const isUp = direction === "up"
+  const isDown = direction === "down"
+  const directionLabel = isUp
+    ? `${label} increased`
+    : isDown
+      ? `${label} decreased`
+      : `${label} unchanged`
+  const Icon = isUp ? TrendingUp : isDown ? TrendingDown : Minus
 
   return (
-    <div
-      style={{
-        background: "#fff",
-        borderRadius: 16,
-        boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
-        overflow: "hidden",
-      }}
+    <span
+      className={`exchange-rate-value exchange-rate-value--${direction}`}
+      aria-label={`${directionLabel}: ${formatted}`}
     >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "1rem 1.25rem",
-          borderBottom: "1px solid #F4F6F8",
-          background: "#0A2540",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 18 }}>💱</span>
-          <span style={{ fontWeight: 700, fontSize: 15, color: "#fff" }}>
-            Exchange Rates
+      <span key={`${formatted}-${direction}`} className="exchange-rate-value__number">
+        {formatted}
+      </span>
+      {direction !== "new" && (
+        <Icon className="exchange-rate-value__icon" aria-hidden="true" />
+      )}
+    </span>
+  )
+}
+
+function normalizeRates(
+  nextRates: ApiExchangeRate[],
+  previousRates: ApiExchangeRate[],
+): RateWithDirection[] {
+  const previousByCode = new Map(previousRates.map((rate) => [rate.code, rate]))
+
+  return nextRates.map((rate) => {
+    const previous = previousByCode.get(rate.code)
+
+    return {
+      ...rate,
+      buyDirection: directionFor(rate.buy, previous?.buy),
+      sellDirection: directionFor(rate.sell, previous?.sell),
+    }
+  })
+}
+
+/** Renders a live exchange-rate preview widget backed by UCB public rates. */
+export default function ExchangeRateWidget({
+  compact = false,
+}: ExchangeRateWidgetProps) {
+  const [rates, setRates] = useState<RateWithDirection[]>(() =>
+    normalizeRates(MOCK_EXCHANGE_RATES.rates, MOCK_PREVIOUS_EXCHANGE_RATES),
+  )
+  const [lastUpdated, setLastUpdated] = useState(MOCK_EXCHANGE_RATES.lastUpdated)
+  const [loading, setLoading] = useState(true)
+  const [hasError, setHasError] = useState(false)
+  const lastSuccessfulRatesRef = useRef<ApiExchangeRate[]>(
+    MOCK_EXCHANGE_RATES.rates,
+  )
+
+  useEffect(() => {
+    const controller = new AbortController()
+    let mounted = true
+
+    async function loadRates() {
+      try {
+        if (lastSuccessfulRatesRef.current.length === 0) setLoading(true)
+        const response = await fetch(EXCHANGE_RATES_URL, {
+          signal: controller.signal,
+          headers: { Accept: "application/json" },
+        })
+
+        if (!response.ok) throw new Error("Unable to load exchange rates")
+
+        const data = (await response.json()) as ExchangeRateResponse
+        if (!Array.isArray(data.rates) || data.rates.length === 0) {
+          throw new Error("Exchange rates are empty")
+        }
+
+        const normalizedRates = normalizeRates(
+          data.rates,
+          lastSuccessfulRatesRef.current,
+        )
+
+        if (!mounted) return
+        lastSuccessfulRatesRef.current = data.rates
+        setRates(normalizedRates)
+        setLastUpdated(data.lastUpdated)
+        setHasError(false)
+      } catch {
+        if (!mounted || controller.signal.aborted) return
+        setHasError(true)
+      } finally {
+        if (mounted && !controller.signal.aborted) setLoading(false)
+      }
+    }
+
+    loadRates()
+    const intervalId = window.setInterval(loadRates, REFRESH_INTERVAL_MS)
+
+    return () => {
+      mounted = false
+      controller.abort()
+      window.clearInterval(intervalId)
+    }
+  }, [])
+
+  const displayRates = compact ? rates.slice(0, 5) : rates
+  const hasRates = displayRates.length > 0
+
+  return (
+    <section className="exchange-rate-card" aria-labelledby="exchange-rate-title">
+      <header className="exchange-rate-card__header">
+        <div className="exchange-rate-card__title-group">
+          <span className="exchange-rate-card__symbol" aria-hidden="true">
+            $
           </span>
+          <h3 id="exchange-rate-title" className="exchange-rate-card__title">
+            Exchange Rates
+          </h3>
         </div>
-        <span
-          style={{
-            fontSize: 11,
-            color: "#64748B",
-            background: "#1A3D5C",
-            padding: "3px 8px",
-            borderRadius: 4,
-          }}
+        <a
+          href="/exchange-rates"
+          className="exchange-rate-card__link"
+          aria-label="View all exchange rates"
         >
-          vs USD
-        </span>
-      </div>
+          View all <span aria-hidden="true">→</span>
+        </a>
+      </header>
 
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
-        <thead>
-          <tr style={{ background: "#F4F6F8" }}>
-            <th
-              style={{
-                padding: "0.625rem 1.25rem",
-                textAlign: "left",
-                fontSize: 11,
-                color: "#6B7280",
-                fontWeight: 600,
-                letterSpacing: 0.5,
-              }}
-            >
-              CURRENCY
-            </th>
-            <th
-              style={{
-                padding: "0.625rem 0.75rem",
-                textAlign: "right",
-                fontSize: 11,
-                color: "#6B7280",
-                fontWeight: 600,
-                letterSpacing: 0.5,
-              }}
-            >
-              WE BUY
-            </th>
-            <th
-              style={{
-                padding: "0.625rem 1.25rem",
-                textAlign: "right",
-                fontSize: 11,
-                color: "#6B7280",
-                fontWeight: 600,
-                letterSpacing: 0.5,
-              }}
-            >
-              WE SELL
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {displayRates.map((rate, i) => (
-            <tr
-              key={rate.currency}
-              style={{ borderTop: i > 0 ? "1px solid #F4F6F8" : undefined }}
-            >
-              <td style={{ padding: "0.75rem 1.25rem" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ fontSize: 16 }}>{rate.flag}</span>
-                  <div>
-                    <div
-                      style={{
-                        fontWeight: 600,
-                        fontSize: 13,
-                        color: "#0A2540",
-                      }}
-                    >
-                      {rate.currency}
-                    </div>
-                    {!compact && (
-                      <div style={{ fontSize: 11, color: "#9CA3AF" }}>
-                        {rate.name}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </td>
-              <td
-                style={{
-                  padding: "0.75rem 0.75rem",
-                  textAlign: "right",
-                  fontWeight: 500,
-                  fontSize: 13,
-                  color: "#374151",
-                  fontVariantNumeric: "tabular-nums",
-                }}
-              >
-                {rate.currency === "KHR"
-                  ? rate.buy.toLocaleString()
-                  : rate.buy.toFixed(3)}
-              </td>
-              <td
-                style={{
-                  padding: "0.75rem 1.25rem",
-                  textAlign: "right",
-                  fontWeight: 600,
-                  fontSize: 13,
-                  color: "#009C9F",
-                  fontVariantNumeric: "tabular-nums",
-                }}
-              >
-                {rate.currency === "KHR"
-                  ? rate.sell.toLocaleString()
-                  : rate.sell.toFixed(3)}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {hasRates ? (
+        <div className="exchange-rate-card__table-wrap">
+          <table className="exchange-rate-table">
+            <thead>
+              <tr>
+                <th scope="col">Currency</th>
+                <th scope="col">We Buy</th>
+                <th scope="col">We Sell</th>
+              </tr>
+            </thead>
+            <tbody>
+              {displayRates.map((rate) => (
+                <tr key={rate.code}>
+                  <th scope="row">
+                    <span className="exchange-rate-currency">
+                      <img
+                        className="exchange-rate-currency__flag"
+                        src={rate.flag}
+                        alt=""
+                        aria-hidden="true"
+                      />
+                      <span>
+                        <span className="exchange-rate-currency__code">
+                          {rate.code}
+                        </span>
+                        <span className="exchange-rate-currency__name">
+                          {rate.name}
+                        </span>
+                      </span>
+                    </span>
+                  </th>
+                  <td>
+                    <RateValue
+                      value={rate.buy}
+                      decimals={rate.decimals}
+                      direction={rate.buyDirection}
+                      label={`${rate.code} buy rate`}
+                    />
+                  </td>
+                  <td>
+                    <RateValue
+                      value={rate.sell}
+                      decimals={rate.decimals}
+                      direction={rate.sellDirection}
+                      label={`${rate.code} sell rate`}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div className="exchange-rate-card__empty" role="status">
+          {loading
+            ? "Loading exchange rates..."
+            : "Rates are temporarily unavailable"}
+        </div>
+      )}
 
-      <div
-        style={{
-          padding: "0.75rem 1.25rem",
-          borderTop: "1px solid #F4F6F8",
-          background: "#FAFAFA",
-          display: "flex",
-          alignItems: "center",
-          gap: 6,
-        }}
-      >
-        <span style={{ fontSize: 11 }}>🕐</span>
-        <span style={{ fontSize: 11, color: "#9CA3AF" }}>
-          Last updated: {lastUpdated}
-        </span>
-      </div>
-    </div>
+      <footer className="exchange-rate-card__footer">
+        {lastUpdated && (
+          <p className="exchange-rate-card__meta">
+            Last updated: {formatLastUpdated(lastUpdated)}
+          </p>
+        )}
+        {hasError && hasRates && (
+          <p className="exchange-rate-card__status" role="status">
+            Showing last available rates.
+          </p>
+        )}
+        <p className="exchange-rate-card__note">
+          Rates are indicative and may change without prior notice. Final rates
+          apply at the time of transaction.
+        </p>
+      </footer>
+    </section>
   )
 }

@@ -13,6 +13,7 @@ import {
 import { useToast } from "../components/ui/Toast"
 import ExchangeRateWidget from "../components/widgets/ExchangeRateWidget"
 
+/** Wraps a design-system section with consistent title and spacing. */
 function Section({
   title,
   id,
@@ -43,6 +44,7 @@ function Section({
   )
 }
 
+/** Renders a design token sample row. */
 function Token({
   name,
   value,
@@ -95,6 +97,7 @@ function Token({
   )
 }
 
+/** Renders a typography specimen for the design system. */
 function Specimen({ label, children }: { label: string children: ReactNode }) {
   return (
     <div>
@@ -114,6 +117,7 @@ function Specimen({ label, children }: { label: string children: ReactNode }) {
   )
 }
 
+/** Renders the project design system reference page. */
 export default function DesignSystemPage() {
   const [paginationPage, setPaginationPage] = useState(1)
   const [modalOpen, setModalOpen] = useState(false)

@@ -131,6 +131,7 @@ const severityColor: Record<string, string> = {
   Low: "#10B981",
 }
 
+/** Renders the security education, checklist, and fraud report page. */
 export default function SecurityCenterPage({
   navigate,
 }: SecurityCenterPageProps) {
@@ -145,9 +146,11 @@ export default function SecurityCenterPage({
   })
   const [reportSubmitted, setReportSubmitted] = useState(false)
 
+  /** Toggles one security checklist item. */
   const toggle = (id: string) => setChecked((c) => ({ ...c, [id]: !c[id] }))
   const checkedCount = Object.values(checked).filter(Boolean).length
 
+  /** Handles submission of the fraud report form. */
   const handleReport = (e: FormEvent) => {
     e.preventDefault()
     setReportSubmitted(true)

@@ -45,6 +45,7 @@ interface QuickActionsProps {
   lang?: LocaleCode
 }
 
+/** Renders homepage shortcut actions for high-frequency banking tasks. */
 export default function QuickActions({
   navigate,
   lang = "en",
@@ -58,7 +59,7 @@ export default function QuickActions({
             display: "grid",
             gridTemplateColumns: "repeat(4, 1fr)",
             gap: "1rem",
-            marginTop: -40,
+            marginTop: -20,
             position: "relative",
             zIndex: 10,
           }}

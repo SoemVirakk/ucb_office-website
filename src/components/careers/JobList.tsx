@@ -12,6 +12,7 @@ interface JobListProps {
   onClearFilters: () => void
 }
 
+/** Renders filtered job result cards and empty states. */
 export default function JobList({
   jobs,
   deptLabels,

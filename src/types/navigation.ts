@@ -10,6 +10,7 @@ export type Page =
   | 'careers'
   | 'about'
   | 'rates'
+  | 'exchange-rates'
   | 'online-services'
   | 'security'
   | 'search'
@@ -32,6 +33,7 @@ export const routeForPage: Record<Page, string> = {
   careers: '/careers',
   about: '/about',
   rates: '/rates',
+  'exchange-rates': '/exchange-rates',
   'online-services': '/online-services',
   security: '/security',
   search: '/search',

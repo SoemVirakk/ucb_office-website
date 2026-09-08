@@ -330,6 +330,7 @@ export const mockContentTranslations: ContentTranslation[] = [
   },
 ]
 
+/** Finds a mock translation record for an entity field and language. */
 export function getMockTranslation(
   entityType: ContentTranslation["entityType"],
   entityId: string,
@@ -345,6 +346,7 @@ export function getMockTranslation(
   )?.translatedValue
 }
 
+/** Returns a mock translation value with an English fallback when missing. */
 export function getMockTranslationWithFallback(
   entityType: ContentTranslation["entityType"],
   entityId: string,

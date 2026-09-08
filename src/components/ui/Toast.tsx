@@ -21,6 +21,7 @@ interface ToastContextType {
 
 const ToastContext = createContext<ToastContextType>({ showToast: () => {} })
 
+/** Provides helper methods for publishing toast notifications. */
 export function useToast() {
   return useContext(ToastContext)
 }
@@ -33,6 +34,7 @@ const colors = {
   info: { bg: "#EFF6FF", border: "#BFDBFE", title: "#1E40AF" },
 }
 
+/** Renders one dismissible toast notification. */
 function ToastItem({
   toast,
   onClose,
@@ -97,6 +99,7 @@ function ToastItem({
   )
 }
 
+/** Provides toast state and notification helpers to child components. */
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<ToastMessage[]>([])
 
@@ -107,6 +110,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), duration)
   }, [])
 
+  /** Removes a toast notification from provider state. */
   const remove = (id: string) => setToasts((t) => t.filter((x) => x.id !== id))
 
   return (

@@ -18,6 +18,7 @@ const categoryConfig: Record<string, {
   partnership: { label: "Partnership", variant: "gray" },
 }
 
+/** Renders a clickable news summary card. */
 export default function NewsCard({ item, onClick }: NewsCardProps) {
   const cat = categoryConfig[item.category] ?? {
     label: item.category,

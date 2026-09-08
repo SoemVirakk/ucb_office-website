@@ -9,13 +9,13 @@ import {
 } from "../data/announcements"
 import type { Page } from "../types/navigation"
 
-
 interface AnnouncementsPageProps {
   navigate: (p: Page) => void
 }
 
 type FilterType = "all" | AnnouncementType
 
+/** Formats a date string for human-readable public content display. */
 function formatDate(d: string) {
   return new Date(d).toLocaleDateString("en-GB", {
     day: "numeric",
@@ -24,6 +24,7 @@ function formatDate(d: string) {
   })
 }
 
+/** Formats a date string with both date and time for announcement details. */
 function formatDateTime(d: string) {
   return (
     new Date(d).toLocaleString("en-GB", {
@@ -38,6 +39,7 @@ function formatDateTime(d: string) {
   )
 }
 
+/** Renders announcement filters, priority notices, and detail content. */
 export default function AnnouncementsPage({
   navigate,
 }: AnnouncementsPageProps) {

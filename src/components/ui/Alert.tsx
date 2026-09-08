@@ -29,6 +29,7 @@ const typeStyles = {
   },
 }
 
+/** Renders an alert message with optional dismissal. */
 export default function Alert({
   type = "info",
   title,

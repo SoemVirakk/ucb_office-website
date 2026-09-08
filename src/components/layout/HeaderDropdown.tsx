@@ -30,8 +30,11 @@ interface HeaderDropdownProps {
   lang: LocaleCode
 
   onNavigate: (link: DropdownLink) => void
+
+  onOpen?: () => void
 }
 
+/** Renders an accessible desktop header dropdown menu. */
 export default function HeaderDropdown({
   label,
   labelKm,
@@ -41,16 +44,19 @@ export default function HeaderDropdown({
   activePath,
   lang,
   onNavigate,
+  onOpen,
 }: HeaderDropdownProps) {
   const [open, setOpen] = useState(false)
 
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    /** Closes the dropdown when the pointer moves outside it. */
     const handlePointerDown = (event: MouseEvent) => {
       if (!dropdownRef.current?.contains(event.target as Node)) setOpen(false)
     }
 
+    /** Closes the dropdown when Escape is pressed. */
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setOpen(false)
     }
@@ -66,43 +72,39 @@ export default function HeaderDropdown({
     }
   }, [])
 
+  /** Adds keyboard controls for opening and moving through the dropdown. */
   const handleTriggerKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault()
 
-      setOpen((value) => !value)
+      setOpen((value) => {
+        if (!value) onOpen?.()
+        return !value
+      })
     }
 
     if (event.key === "ArrowDown") {
       event.preventDefault()
 
+      onOpen?.()
       setOpen(true)
     }
   }
 
   return (
-    <div ref={dropdownRef} style={{ position: "relative" }}>
+    <div ref={dropdownRef} className="header-dropdown">
       <button
         className="btn-ghost"
-        onClick={() => setOpen((value) => !value)}
+        onClick={() =>
+          setOpen((value) => {
+            if (!value) onOpen?.()
+            return !value
+          })
+        }
         onKeyDown={handleTriggerKeyDown}
         aria-haspopup="true"
         aria-expanded={open}
-        style={{
-          fontSize: 14,
-
-          fontWeight: active ? 600 : 500,
-
-          color: active ? "#009C9F" : "#0A2540",
-
-          padding: "0.5rem 0.75rem",
-
-          width: 112,
-
-          justifyContent: "center",
-
-          gap: 4,
-        }}
+        className={`btn-ghost header-dropdown__trigger${active ? " is-active" : ""}`}
       >
         {lang === "km"
           ? (labelKm ?? label)
@@ -117,11 +119,7 @@ export default function HeaderDropdown({
           stroke="currentColor"
           strokeWidth="2.5"
           strokeLinecap="round"
-          style={{
-            transform: open ? "rotate(180deg)" : "none",
-            transition: "transform 150ms",
-            flexShrink: 0,
-          }}
+          className={`header-dropdown__chevron${open ? " is-open" : ""}`}
         >
           <polyline points="6 9 12 15 18 9" />
         </svg>
@@ -129,20 +127,7 @@ export default function HeaderDropdown({
       {open && (
         <div
           role="menu"
-          style={{
-            position: "absolute",
-            top: "calc(100% + 8px)",
-            left: 0,
-            zIndex: 60,
-
-            background: "#fff",
-            borderRadius: 14,
-            border: "1px solid #E5E7EB",
-
-            boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
-            padding: "0.5rem",
-            minWidth: 220,
-          }}
+          className="header-dropdown__menu"
         >
           {links.map((link) => (
             <button
@@ -152,30 +137,7 @@ export default function HeaderDropdown({
                 onNavigate(link)
                 setOpen(false)
               }}
-              style={{
-                display: "block",
-                width: "100%",
-                padding: "0.7rem 0.875rem",
-                border: "none",
-
-                borderRadius: 8,
-                cursor: "pointer",
-                textAlign: "left",
-
-                background:
-                  activePath === link.path ? "#E6F7F7" : "transparent",
-
-                color: activePath === link.path ? "#009C9F" : "#0A2540",
-
-                fontSize: 14,
-                fontWeight: 600,
-              }}
-              onMouseEnter={(event) => {
-                event.currentTarget.style.background = "#F4F6F8"
-              }}
-              onMouseLeave={(event) => {
-                event.currentTarget.style.background = "transparent"
-              }}
+              className={`header-dropdown__item${activePath === link.path ? " is-active" : ""}`}
             >
               {lang === "km"
                 ? (link.labelKm ?? link.label)

@@ -1,40 +1,9 @@
+import { FeatureCard, SectionHeader } from "../components/cards/UcbCardSystem"
+import { mobileBankingFeatures } from "../data/digitalBankingCards"
 
 interface DigitalBankingPageProps {
   navigate: (p: Page) => void
 }
-
-const mobileFeatures = [
-  {
-    icon: "💸",
-    title: "Transfer Money",
-    desc: "Send to any UCB account or other Cambodian banks instantly, 24/7. Domestic transfers from just USD 0.25.",
-  },
-  {
-    icon: "📄",
-    title: "Pay Bills",
-    desc: "Pay electricity, water, internet, and more directly from the app. Schedule recurring payments effortlessly.",
-  },
-  {
-    icon: "📱",
-    title: "Mobile Top-up",
-    desc: "Top up any Cambodian mobile network — Cellcard, Smart, Metfone — in seconds.",
-  },
-  {
-    icon: "🔍",
-    title: "QR Payments",
-    desc: "Scan and pay at thousands of merchants across Cambodia and internationally in Thailand, Vietnam, and Singapore.",
-  },
-  {
-    icon: "📊",
-    title: "Financial Insights",
-    desc: "AI-powered spending analysis with category breakdowns, monthly budgets, and savings goals.",
-  },
-  {
-    icon: "💳",
-    title: "Card Management",
-    desc: "Freeze / unfreeze cards instantly, set spending limits, and get real-time transaction notifications.",
-  },
-]
 
 const internetFeatures = [
   {
@@ -82,6 +51,7 @@ const securityFeatures = [
   },
 ]
 
+/** Renders digital banking features, app benefits, and support calls to action. */
 export default function DigitalBankingPage({
   navigate,
 }: DigitalBankingPageProps) {
@@ -159,9 +129,14 @@ export default function DigitalBankingPage({
                 UCB Mobile App and Internet Banking give you complete control
                 over your finances — anywhere, anytime, in English or Khmer.
               </p>
-              <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+              <div
+                id="app-downloads"
+                style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}
+              >
                 <a
-                  href="#"
+                  href="https://apps.apple.com/cy/app/ucb-e-banking-kh/id1441385292"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -193,7 +168,9 @@ export default function DigitalBankingPage({
                   </div>
                 </a>
                 <a
-                  href="#"
+                  href="https://play.google.com/store/apps/details?id=kh.com.ucb.ebank.mobilebanking&hl=en"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -214,10 +191,22 @@ export default function DigitalBankingPage({
                     width="22"
                     height="22"
                   >
-                    <path fill="#fff" d="M3.18 1.04A1.99 1.99 0 0 0 2 2.95v18.1c0 .78.45 1.49 1.18 1.91L13.3 12 3.18 1.04Z" />
-                    <path fill="#d7f9df" d="m14.05 12.8 2.75 2.98-9.92 5.7a2.1 2.1 0 0 1-1.8.13l8.97-8.81Z" />
-                    <path fill="#e8f7ff" d="m14.05 11.2 2.75-2.98-9.92-5.7a2.1 2.1 0 0 0-1.8-.13l8.97 8.81Z" />
-                    <path fill="#b8f0c8" d="m17.72 15.78 2.48-1.42c.98-.56.98-1.98 0-2.54l-2.48-1.42L14.7 12l3.02 3.78Z" />
+                    <path
+                      fill="#fff"
+                      d="M3.18 1.04A1.99 1.99 0 0 0 2 2.95v18.1c0 .78.45 1.49 1.18 1.91L13.3 12 3.18 1.04Z"
+                    />
+                    <path
+                      fill="#d7f9df"
+                      d="m14.05 12.8 2.75 2.98-9.92 5.7a2.1 2.1 0 0 1-1.8.13l8.97-8.81Z"
+                    />
+                    <path
+                      fill="#e8f7ff"
+                      d="m14.05 11.2 2.75-2.98-9.92-5.7a2.1 2.1 0 0 0-1.8-.13l8.97 8.81Z"
+                    />
+                    <path
+                      fill="#b8f0c8"
+                      d="m17.72 15.78 2.48-1.42c.98-.56.98-1.98 0-2.54l-2.48-1.42L14.7 12l3.02 3.78Z"
+                    />
                   </svg>
                   <div>
                     <div
@@ -242,12 +231,12 @@ export default function DigitalBankingPage({
               {[
                 {
                   bg: "#1A3D5C",
-                  img: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=280&h=560&fit=crop&auto=format",
+                  img: "/assets/digitalbanking/mobile2.webp",
                   alt: "UCB Mobile App dashboard",
                 },
                 {
                   bg: "#007B7E",
-                  img: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=280&h=560&fit=crop&auto=format",
+                  img: "/assets/digitalbanking/mobile1.webp",
                   alt: "UCB Mobile App transfer screen",
                   transform: "translateY(24px)",
                 },
@@ -282,69 +271,24 @@ export default function DigitalBankingPage({
       </section>
 
       {/* Mobile features */}
-      <section className="page-section">
+      <section className="page-section" id="mobile-banking-features">
         <div className="container">
-          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-            <h2 className="section-title">UCB Mobile Banking</h2>
-            <p className="section-subtitle">
-              Everything you need to manage your money — built for Cambodians.
-            </p>
-          </div>
-          <div
-            className="grid-3"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "1.5rem",
-            }}
-          >
-            {mobileFeatures.map((f) => (
-              <div
-                key={f.title}
-                style={{
-                  padding: "1.5rem",
-                  background: "#fff",
-                  borderRadius: 16,
-                  border: "1px solid #E5E7EB",
-                  transition: "all 150ms",
-                }}
-                onMouseEnter={(e) => {
-                  const el = e.currentTarget as HTMLDivElement
-                  el.style.borderColor = "#009C9F"
-                  el.style.background = "#E6F7F7"
-                }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget as HTMLDivElement
-                  el.style.borderColor = "#E5E7EB"
-                  el.style.background = "#fff"
-                }}
-              >
-                <div style={{ fontSize: 32, marginBottom: "0.875rem" }}>
-                  {f.icon}
-                </div>
-                <h3
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 700,
-                    color: "#0A2540",
-                    marginBottom: 8,
-                  }}
-                >
-                  {f.title}
-                </h3>
-                <p style={{ fontSize: 14, color: "#6B7280", lineHeight: 1.6 }}>
-                  {f.desc}
-                </p>
-              </div>
+          <SectionHeader
+            title="UCB Mobile Banking"
+            subtitle="Everyday mobile banking capabilities grouped under one UCB Mobile Banking product."
+          />
+          <div className="ucb-feature-grid" aria-label="UCB Mobile Banking capabilities">
+            {mobileBankingFeatures.map((feature) => (
+              <FeatureCard feature={feature} key={feature.title} />
             ))}
           </div>
-          <div style={{ textAlign: "center", marginTop: "2.5rem" }}>
-            <button
-              className="btn-primary"
-              style={{ padding: "0.875rem 2.5rem", fontSize: 16 }}
+          <div className="digital-register-action">
+            <a
+              className="btn-primary digital-register-action__button"
+              href="/contact?subject=Digital%20Banking%20Support&message=I%20would%20like%20to%20register%20for%20UCB%20Mobile%20Banking.#contact-form"
             >
               Register for Mobile Banking
-            </button>
+            </a>
           </div>
         </div>
       </section>
@@ -542,31 +486,22 @@ export default function DigitalBankingPage({
             Download UCB Mobile App or register for Internet Banking — free for
             all UCB account holders.
           </p>
-          <div
-            style={{
-              display: "flex",
-              gap: "1rem",
-              justifyContent: "center",
-              flexWrap: "wrap",
-            }}
-          >
-            <button className="btn-white" style={{ padding: "0.875rem 2rem" }}>
+          <div className="digital-cta-actions">
+            <a className="btn-white digital-cta-actions__button" href="#app-downloads">
               Download the App
-            </button>
-            <button
-              className="btn-outline"
-              style={{
-                padding: "0.875rem 2rem",
-                color: "#fff",
-                borderColor: "#fff",
-              }}
-              onClick={() => navigate("login")}
+            </a>
+            <a
+              className="btn-outline digital-cta-actions__button digital-cta-actions__button--outline"
+              href="/contact?subject=Digital%20Banking%20Support&message=I%20would%20like%20to%20register%20for%20UCB%20Internet%20Banking.#contact-form"
             >
               Register for Internet Banking
-            </button>
+            </a>
           </div>
         </div>
       </section>
     </div>
   )
 }
+
+
+

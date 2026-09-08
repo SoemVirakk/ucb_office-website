@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
+import { useNavigate as useRouterNavigate } from "react-router-dom"
 import Badge from "../components/ui/Badge"
 import Pagination from "../components/ui/Pagination"
 import { promotions, type Promotion } from "../data/promotions"
@@ -6,12 +7,14 @@ import type { Page } from "../types/navigation"
 
 interface PromotionsPageProps {
   navigate: (p: Page) => void
+  initialPromoId?: string | null
 }
 
 type Cat = "all" | "retail" | "digital" | "loan" | "card" | "deposit"
 type StatusFilter = "all" | "active" | "upcoming" | "ended"
 const PER_PAGE = 6
 
+/** Formats a date string for human-readable public content display. */
 function formatDate(d: string) {
   return new Date(d).toLocaleDateString("en-GB", {
     day: "numeric",
@@ -20,6 +23,7 @@ function formatDate(d: string) {
   })
 }
 
+/** Checks whether a promotion has passed its configured end date. */
 function isExpired(p: Promotion) {
   return new Date(p.expiresAt) < new Date() || p.status === "ended"
 }
@@ -204,12 +208,43 @@ const statusOptions: { id: StatusFilter label: string }[] = [
   { id: "ended", label: "Ended" },
 ]
 
-export default function PromotionsPage({ navigate }: PromotionsPageProps) {
+/** Renders promotion listings, filters, and detail views. */
+export default function PromotionsPage({
+  navigate,
+  initialPromoId,
+}: PromotionsPageProps) {
+  const routerNavigate = useRouterNavigate()
   const [cat, setCat] = useState<Cat>("all")
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all")
   const [search, setSearch] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
-  const [selectedPromo, setSelectedPromo] = useState<Promotion | null>(null)
+  const [selectedPromo, setSelectedPromo] = useState<Promotion | null>(
+    initialPromoId
+      ? (promotions.find((promotion) => promotion.id === initialPromoId) ??
+          null)
+      : null,
+  )
+
+  useEffect(() => {
+    setSelectedPromo(
+      initialPromoId
+        ? (promotions.find((promotion) => promotion.id === initialPromoId) ??
+            null)
+        : null,
+    )
+  }, [initialPromoId])
+
+  /** Opens a promotion detail view and mirrors it into the browser URL. */
+  const openPromotion = (promotion: Promotion) => {
+    setSelectedPromo(promotion)
+    routerNavigate(`/promotions/${encodeURIComponent(promotion.id)}`)
+  }
+
+  /** Returns from a promotion detail URL to the list route. */
+  const closePromotion = () => {
+    setSelectedPromo(null)
+    routerNavigate("/promotions")
+  }
 
   const featured = promotions.find((p) => p.featured && p.status === "active")
 
@@ -271,7 +306,7 @@ export default function PromotionsPage({ navigate }: PromotionsPageProps) {
         >
           <div className="container" style={{ maxWidth: 900 }}>
             <button
-              onClick={() => setSelectedPromo(null)}
+              onClick={closePromotion}
               style={{
                 background: "none",
                 border: "none",
@@ -751,7 +786,7 @@ export default function PromotionsPage({ navigate }: PromotionsPageProps) {
                   <button
                     className="btn-outline"
                     style={{ marginTop: "0.75rem", fontSize: 13 }}
-                    onClick={() => setSelectedPromo(null)}
+                    onClick={closePromotion}
                   >
                     View All Promotions
                   </button>
@@ -786,10 +821,7 @@ export default function PromotionsPage({ navigate }: PromotionsPageProps) {
                   return (
                     <button
                       key={p.id}
-                      onClick={() => {
-                        setSelectedPromo(p)
-                        window.scrollTo({ top: 0, behavior: "smooth" })
-                      }}
+                      onClick={() => openPromotion(p)}
                       style={{
                         textAlign: "left",
                         background: "#fff",
@@ -900,7 +932,7 @@ export default function PromotionsPage({ navigate }: PromotionsPageProps) {
       {featured && (
         <div className="container" style={{ padding: "2rem 1.5rem 0" }}>
           <button
-            onClick={() => setSelectedPromo(featured)}
+            onClick={() => openPromotion(featured)}
             style={{
               display: "block",
               width: "100%",
@@ -1121,7 +1153,7 @@ export default function PromotionsPage({ navigate }: PromotionsPageProps) {
               return (
                 <button
                   key={p.id}
-                  onClick={() => setSelectedPromo(p)}
+                  onClick={() => openPromotion(p)}
                   style={{
                     textAlign: "left",
                     background: "#fff",

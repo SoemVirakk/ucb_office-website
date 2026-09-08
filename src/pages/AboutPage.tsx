@@ -1,14 +1,33 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useLocation, useNavigate as useRouterNavigate } from "react-router-dom"
 import { leadership } from "../data/leadership"
 import { milestones } from "../data/milestones"
 import type { Page } from "../types/navigation"
-
 
 interface AboutPageProps {
   navigate: (p: Page) => void
 }
 
 type Tab = "overview" | "leadership" | "timeline" | "governance"
+
+const tabRoutes: Record<Tab, string> = {
+  overview: "/about",
+  leadership: "/about/leadership",
+  timeline: "/about/journey",
+  governance: "/about/governance",
+}
+
+const legacyTabRoutes: Record<string, Tab> = {
+  "/leadership": "leadership",
+}
+
+/** Converts About page sub-routes into the matching tab key. */
+function tabFromPath(pathname: string): Tab {
+  const path = pathname.replace(/\/$/, "") || "/about"
+  if (legacyTabRoutes[path]) return legacyTabRoutes[path]
+  const found = Object.entries(tabRoutes).find(([, route]) => route === path)
+  return found ? found[0] as Tab : "overview"
+}
 
 const values = [
   {
@@ -118,9 +137,16 @@ const csrItems = [
   },
 ]
 
+/** Renders company profile, leadership, milestones, and governance content. */
 export default function AboutPage({ navigate }: AboutPageProps) {
-  const [tab, setTab] = useState<Tab>("overview")
+  const location = useLocation()
+  const routerNavigate = useRouterNavigate()
+  const [tab, setTab] = useState<Tab>(() => tabFromPath(location.pathname))
   const [expandedMember, setExpandedMember] = useState<string | null>(null)
+
+  useEffect(() => {
+    setTab(tabFromPath(location.pathname))
+  }, [location.pathname])
 
   const tabs: { id: Tab label: string }[] = [
     { id: "overview", label: "Overview" },
@@ -128,6 +154,13 @@ export default function AboutPage({ navigate }: AboutPageProps) {
     { id: "timeline", label: "Our Journey" },
     { id: "governance", label: "Governance & Reports" },
   ]
+
+  /** Changes the visible About tab and mirrors the selection into the URL. */
+  const changeTab = (nextTab: Tab) => {
+    setTab(nextTab)
+    setExpandedMember(null)
+    routerNavigate(tabRoutes[nextTab])
+  }
 
   return (
     <div>
@@ -256,7 +289,7 @@ export default function AboutPage({ navigate }: AboutPageProps) {
             {tabs.map((t) => (
               <button
                 key={t.id}
-                onClick={() => setTab(t.id)}
+                onClick={() => changeTab(t.id)}
                 style={{
                   padding: "1.125rem 1.5rem",
                   fontSize: 14,

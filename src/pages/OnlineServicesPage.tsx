@@ -85,6 +85,7 @@ const timeSlots = [
   "4:00 PM",
 ]
 
+/** Displays a submitted online-service request confirmation. */
 function SuccessCard({
   title,
   ref_,
@@ -161,10 +162,12 @@ const inputStyle = {
   fontFamily: "inherit",
 }
 
+/** Generates a short local reference number for submitted service requests. */
 function genRef() {
   return "UCB-2026-" + String(Math.floor(100000 + Math.random() * 900000))
 }
 
+/** Renders online application, appointment, inquiry, and tracking workflows. */
 export default function OnlineServicesPage({
   navigate,
 }: OnlineServicesPageProps) {
@@ -231,11 +234,13 @@ export default function OnlineServicesPage({
   const [trackResult, setTrackResult] =
     useState<typeof mockStatuses[string] | null | "not-found">(null)
 
+  /** Clears the current online-service form state after submission. */
   const reset = () => {
     setSubmitted(false)
     setRefNum("")
   }
 
+  /** Handles the current online-service form submission. */
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     setRefNum(genRef())
@@ -243,6 +248,7 @@ export default function OnlineServicesPage({
     window.scrollTo({ top: 200, behavior: "smooth" })
   }
 
+  /** Looks up a submitted service request by reference number. */
   const handleTrack = () => {
     const result = mockStatuses[trackRef.trim().toUpperCase()]
     setTrackResult(result ?? "not-found")

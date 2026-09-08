@@ -55,10 +55,12 @@ const cols = [
   },
 ]
 
+/** Renders the public footer navigation, newsletter form, and contact links. */
 export default function Footer({ navigate }: FooterProps) {
   const [email, setEmail] = useState("")
   const [subscribed, setSubscribed] = useState(false)
 
+  /** Validates the newsletter email and shows the subscribed state. */
   const handleSubscribe = (e: FormEvent) => {
     e.preventDefault()
     if (email.includes("@")) setSubscribed(true)
@@ -102,7 +104,7 @@ export default function Footer({ navigate }: FooterProps) {
               <form
                 className="footer-subscribe-form"
                 onSubmit={handleSubscribe}
-                style={{ display: "flex", gap: "0.5rem" }}
+                style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}
               >
                 <input
                   type="email"
@@ -304,10 +306,22 @@ export default function Footer({ navigate }: FooterProps) {
                   width="18"
                   height="18"
                 >
-                  <path fill="#fff" d="M3.18 1.04A1.99 1.99 0 0 0 2 2.95v18.1c0 .78.45 1.49 1.18 1.91L13.3 12 3.18 1.04Z" />
-                  <path fill="#d7f9df" d="m14.05 12.8 2.75 2.98-9.92 5.7a2.1 2.1 0 0 1-1.8.13l8.97-8.81Z" />
-                  <path fill="#e8f7ff" d="m14.05 11.2 2.75-2.98-9.92-5.7a2.1 2.1 0 0 0-1.8-.13l8.97 8.81Z" />
-                  <path fill="#b8f0c8" d="m17.72 15.78 2.48-1.42c.98-.56.98-1.98 0-2.54l-2.48-1.42L14.7 12l3.02 3.78Z" />
+                  <path
+                    fill="#fff"
+                    d="M3.18 1.04A1.99 1.99 0 0 0 2 2.95v18.1c0 .78.45 1.49 1.18 1.91L13.3 12 3.18 1.04Z"
+                  />
+                  <path
+                    fill="#d7f9df"
+                    d="m14.05 12.8 2.75 2.98-9.92 5.7a2.1 2.1 0 0 1-1.8.13l8.97-8.81Z"
+                  />
+                  <path
+                    fill="#e8f7ff"
+                    d="m14.05 11.2 2.75-2.98-9.92-5.7a2.1 2.1 0 0 0-1.8-.13l8.97 8.81Z"
+                  />
+                  <path
+                    fill="#b8f0c8"
+                    d="m17.72 15.78 2.48-1.42c.98-.56.98-1.98 0-2.54l-2.48-1.42L14.7 12l3.02 3.78Z"
+                  />
                 </svg>
                 <div>
                   <div

@@ -5,6 +5,7 @@ interface CreditCardProductCardProps {
   product: CreditCardProduct
 }
 
+/** Renders a fallback card visual when the product image cannot load. */
 function CreditCardPlaceholder({ productName }: { productName: string }) {
   return (
     <svg
@@ -23,6 +24,7 @@ function CreditCardPlaceholder({ productName }: { productName: string }) {
   )
 }
 
+/** Renders an interactive credit-card product card with optional flip behavior. */
 export default function CreditCardProductCard({
   product,
 }: CreditCardProductCardProps) {
@@ -34,6 +36,7 @@ export default function CreditCardProductCard({
     : product.cardFrontImageUrl
   const showImage = selectedImageUrl && !imageFailed
 
+  /** Switches a credit-card image to its fallback placeholder after load failure. */
   const handleImageError = () => {
     setImageFailed(true)
 

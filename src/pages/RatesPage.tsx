@@ -1,10 +1,11 @@
 import { useState, useMemo } from "react"
-import { exchangeRates } from "../data/exchangeRates"
 import { depositRates, loanRates, loanFees } from "../data/depositRates"
+import { useExchangeRates } from "../hooks/useExchangeRates"
 
 type Tab = "exchange" | "deposit" | "loan" | "calculators"
 type CalcMode = "loan" | "deposit"
 
+/** Calculates the monthly installment for a fixed-rate loan. */
 function calcEMI(
   principal: number,
   annualRate: number,
@@ -17,6 +18,7 @@ function calcEMI(
   )
 }
 
+/** Calculates simple deposit maturity value from principal, rate, and term. */
 function calcDepositMaturity(
   principal: number,
   annualRate: number,
@@ -26,6 +28,7 @@ function calcDepositMaturity(
   return principal * Math.pow(1 + r, months)
 }
 
+/** Formats numeric currency values for rate calculator output. */
 function fmt(n: number, decimals = 2): string {
   return n.toLocaleString("en-US", {
     minimumFractionDigits: decimals,
@@ -33,7 +36,20 @@ function fmt(n: number, decimals = 2): string {
   })
 }
 
+function formatRateDate(value: string): string {
+  return new Date(value).toLocaleString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZoneName: "short",
+  })
+}
+
+/** Renders exchange rates, deposit rates, and loan/deposit calculators. */
 export default function RatesPage() {
+  const { rates: exchangeRates, source, loading, error } = useExchangeRates()
   const [tab, setTab] = useState<Tab>("exchange")
   const [calcMode, setCalcMode] = useState<CalcMode>("loan")
   const [fromCurrency, setFromCurrency] = useState("USD")
@@ -85,13 +101,12 @@ export default function RatesPage() {
   ]
 
   const allCurrencies = [
-    "USD",
-    "KHR",
-    ...exchangeRates.rates.map((r) => r.currency),
+    ...new Set(["USD", "KHR", ...exchangeRates.rates.map((r) => r.currency)]),
   ]
   const khrPerUsd =
     exchangeRates.rates.find((r) => r.currency === "KHR")?.sell ?? 4100
 
+  /** Converts a currency into its USD exchange-rate baseline. */
   function getUsdRate(currency: string): number {
     if (currency === "USD") return 1
     if (currency === "KHR") return 1 / khrPerUsd
@@ -199,9 +214,39 @@ export default function RatesPage() {
                   Foreign Exchange Rates
                 </h2>
                 <div style={{ fontSize: 13, color: "#6B7280" }}>
-                  Base currency: <strong>USD</strong> · Last updated:{" "}
-                  {exchangeRates.lastUpdated}
+                  Base currency: <strong>{exchangeRates.base}</strong> · Last
+                  updated: {formatRateDate(exchangeRates.lastUpdated)}
                 </div>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-end",
+                  gap: 6,
+                }}
+              >
+                <span
+                  style={{
+                    padding: "5px 10px",
+                    borderRadius: 999,
+                    background: source === "live" ? "#E6F7F7" : "#FDF6E3",
+                    color: source === "live" ? "#007B7E" : "#92400E",
+                    fontSize: 12,
+                    fontWeight: 700,
+                  }}
+                >
+                  {loading
+                    ? "Loading live rates"
+                    : source === "live"
+                      ? "Live rates"
+                      : "Mock fallback"}
+                </span>
+                {error && (
+                  <span style={{ fontSize: 12, color: "#9CA3AF" }}>
+                    Live API unavailable: showing mock data
+                  </span>
+                )}
               </div>
             </div>
 
@@ -410,7 +455,9 @@ export default function RatesPage() {
                           color: "#374151",
                         }}
                       >
-                        {fmt(rate.buy * khrPerUsd, 0)}
+                        {rate.currency === "KHR"
+                          ? fmt(rate.buy, 0)
+                          : fmt(rate.buy * khrPerUsd, 0)}
                       </td>
                       <td
                         style={{
@@ -419,7 +466,9 @@ export default function RatesPage() {
                           color: "#374151",
                         }}
                       >
-                        {fmt(rate.sell * khrPerUsd, 0)}
+                        {rate.currency === "KHR"
+                          ? fmt(rate.sell, 0)
+                          : fmt(rate.sell * khrPerUsd, 0)}
                       </td>
                       <td
                         style={{
@@ -428,7 +477,9 @@ export default function RatesPage() {
                           color: "#374151",
                         }}
                       >
-                        {fmt(rate.buy, 4)}
+                        {rate.currency === "KHR"
+                          ? fmt(1 / rate.buy, 6)
+                          : fmt(rate.buy, 4)}
                       </td>
                       <td
                         style={{
@@ -437,7 +488,9 @@ export default function RatesPage() {
                           color: "#374151",
                         }}
                       >
-                        {fmt(rate.sell, 4)}
+                        {rate.currency === "KHR"
+                          ? fmt(1 / rate.sell, 6)
+                          : fmt(rate.sell, 4)}
                       </td>
                     </tr>
                   ))}
@@ -449,6 +502,7 @@ export default function RatesPage() {
               reserves the right to quote different rates for large
               transactions. For foreign currency purchases, please visit your
               nearest UCB branch.
+              {" "}Live source: exchangerate-api.com. Fallback: UCB mock data.
             </p>
           </div>
         )}

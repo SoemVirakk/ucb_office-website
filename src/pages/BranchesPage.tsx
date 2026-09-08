@@ -5,6 +5,7 @@ import type { Branch } from "../data/branches"
 
 type TypeFilter = "all" | "branch" | "atm" | "24h-atm" | "cdm"
 
+/** Renders branch and ATM location search results. */
 export default function BranchesPage() {
   const [search, setSearch] = useState("")
   const [province, setProvince] = useState("all")

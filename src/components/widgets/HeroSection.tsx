@@ -13,6 +13,7 @@ interface HeroProps {
   compact?: boolean
 }
 
+/** Renders a reusable page hero with optional calls to action. */
 export default function HeroSection({
   title,
   titleHighlight,

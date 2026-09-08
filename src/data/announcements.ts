@@ -186,6 +186,7 @@ export const typeConfig: Record<AnnouncementType, {
   regulatory: { label: "Regulatory", icon: "📋", color: "#2563EB" },
 }
 
+/** Checks whether an announcement is currently publishable. */
 export function isActive(ann: Announcement): boolean {
   const now = new Date()
   return (

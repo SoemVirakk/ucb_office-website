@@ -1,4 +1,5 @@
-import { useState, type FormEvent } from "react"
+import { useEffect, useState, type FormEvent } from "react"
+import { useNavigate as useRouterNavigate } from "react-router-dom"
 import {
   jobs,
   departments,
@@ -12,9 +13,9 @@ import CareerBenefits from "../components/careers/CareerBenefits"
 import JobList from "../components/careers/JobList"
 import type { Page } from "../types/navigation"
 
-
 interface CareersPageProps {
   navigate: (p: Page) => void
+  initialJobId?: string | null
 }
 
 type AppState = "list" | "detail" | "apply" | "success"
@@ -62,9 +63,14 @@ const whyItems = [
   },
 ]
 
-export default function CareersPage({ navigate }: CareersPageProps) {
-  const [view, setView] = useState<AppState>("list")
-  const [selectedJob, setSelectedJob] = useState<Job | null>(null)
+/** Renders career search, job listings, and application entry points. */
+export default function CareersPage({ navigate, initialJobId }: CareersPageProps) {
+  const routerNavigate = useRouterNavigate()
+  const initialJob = initialJobId
+    ? (jobs.find((job) => job.id === initialJobId) ?? null)
+    : null
+  const [view, setView] = useState<AppState>(initialJob ? "detail" : "list")
+  const [selectedJob, setSelectedJob] = useState<Job | null>(initialJob)
   const [dept, setDept] = useState("all")
   const [location, setLocation] = useState("All Locations")
   const [jobType, setJobType] = useState("all")
@@ -73,6 +79,14 @@ export default function CareersPage({ navigate }: CareersPageProps) {
   const [errors, setErrors] = useState<Partial<AppForm>>({})
   const [talentEmail, setTalentEmail] = useState("")
   const [talentSub, setTalentSub] = useState(false)
+
+  useEffect(() => {
+    const job = initialJobId
+      ? (jobs.find((item) => item.id === initialJobId) ?? null)
+      : null
+    setSelectedJob(job)
+    setView(job ? "detail" : "list")
+  }, [initialJobId])
 
   const filtered = jobs.filter((j) => {
     if (dept !== "all" && j.department !== dept) return false
@@ -87,6 +101,7 @@ export default function CareersPage({ navigate }: CareersPageProps) {
     return true
   })
 
+  /** Validates the current form state before allowing submission. */
   const validate = () => {
     const e: Partial<AppForm> = {}
     if (!form.firstName.trim()) e.firstName = "Required"
@@ -101,24 +116,27 @@ export default function CareersPage({ navigate }: CareersPageProps) {
     return Object.keys(e).length === 0
   }
 
+  /** Handles a career application submission and shows the confirmation state. */
   const handleApply = (e: FormEvent) => {
     e.preventDefault()
     if (validate()) setView("success")
   }
 
+  /** Opens the selected job detail view. */
   const openDetail = (job: Job) => {
     setSelectedJob(job)
     setView("detail")
-    window.scrollTo({ top: 0, behavior: "smooth" })
+    routerNavigate(`/careers/${encodeURIComponent(job.id)}`)
   }
+  /** Returns from job detail or application views to the listing. */
   const backToList = () => {
     setView("list")
     setSelectedJob(null)
-    window.scrollTo({ top: 0, behavior: "smooth" })
+    routerNavigate("/careers")
   }
+  /** Switches the selected job into the application form view. */
   const openApply = () => {
     setView("apply")
-    window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   const inputStyle = {
@@ -191,6 +209,7 @@ export default function CareersPage({ navigate }: CareersPageProps) {
                 setView("list")
                 setForm(emptyForm)
                 setSelectedJob(null)
+                routerNavigate("/careers")
               }}
             >
               Browse More Jobs

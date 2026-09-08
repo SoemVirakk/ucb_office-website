@@ -1,4 +1,3 @@
-
 interface Props {
   navigate: (p: Page) => void
 }
@@ -532,6 +531,7 @@ const pageStatusStyle: Record<Status, {
   missing: { bg: "#FEE2E2", color: "#B91C1C", label: "Missing", icon: "✕" },
 }
 
+/** Renders the design review checklist and scoring page. */
 export default function DesignReviewPage({ navigate }: Props) {
   const complete = PAGES.filter((p) => p.status === "complete").length
   const partial = PAGES.filter((p) => p.status === "partial").length

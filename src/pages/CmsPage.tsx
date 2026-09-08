@@ -36,6 +36,7 @@ const navItems: { id: CmsSection label: string icon: string }[] = [
   { id: "announcements", label: "Announcements", icon: "📢" },
 ]
 
+/** Renders a compact CMS status indicator. */
 function StatusBadge({ status }: { status: ContentStatus }) {
   const cfg = statusColors[status]
   return (
@@ -55,6 +56,7 @@ function StatusBadge({ status }: { status: ContentStatus }) {
   )
 }
 
+/** Renders one CMS dashboard KPI card. */
 function KpiCard({
   icon,
   label,
@@ -132,6 +134,7 @@ function KpiCard({
   )
 }
 
+/** Renders the CMS overview dashboard and content health summaries. */
 function ContentDashboard({
   setSection,
 }: {
@@ -354,8 +357,8 @@ function ContentDashboard({
             "expired",
             "archived",
           ] as ContentStatus[]).map((s, i, arr) => (
-            <>
-              <StatusBadge key={s} status={s} />
+            <div key={s} style={{ display: "contents" }}>
+              <StatusBadge status={s} />
               {i < arr.length - 1 && (
                 <span
                   key={`arrow-${s}`}
@@ -364,7 +367,7 @@ function ContentDashboard({
                   →
                 </span>
               )}
-            </>
+            </div>
           ))}
         </div>
       </div>
@@ -480,6 +483,7 @@ function ContentDashboard({
   )
 }
 
+/** Renders CMS controls for banner content management. */
 function BannerManagement() {
   const [view, setView] = useState<BannerView>("list")
   const [previewDevice, setPreviewDevice] = useState<"desktop" | "mobile">(
@@ -649,6 +653,7 @@ function BannerManagement() {
   }
 
   if (view === "create") {
+    /** Renders a labeled CMS form field wrapper with optional required marker. */
     const Field = ({
       label,
       children,
@@ -1073,6 +1078,7 @@ function BannerManagement() {
   )
 }
 
+/** Renders CMS controls for promotion content management. */
 function PromotionManagement() {
   const [view, setView] = useState<PromoView>("list")
   const [selected, setSelected] = useState<Promotion | null>(null)
@@ -1531,6 +1537,7 @@ function PromotionManagement() {
   )
 }
 
+/** Renders CMS controls for news content management. */
 function NewsManagement() {
   const [view, setView] = useState<NewsView>("list")
   const [selected, setSelected] = useState<NewsItem | null>(null)
@@ -2107,6 +2114,7 @@ function NewsManagement() {
   )
 }
 
+/** Renders CMS controls for announcement content management. */
 function AnnouncementManagement() {
   const [view, setView] = useState<AnnView>("list")
   const [pendingPublish, setPendingPublish] = useState<null | {
@@ -2846,16 +2854,19 @@ function AnnouncementManagement() {
   )
 }
 
+/** Renders the CMS shell and routes between content management panels. */
 export default function CmsPage({ navigate }: CmsPageProps) {
   const [section, setSection] = useState<CmsSection>("dashboard")
 
   return (
-    <div style={{ background: "#F4F6F8", minHeight: "100vh", display: "flex" }}>
+    <div
+      className="cms-layout"
+      style={{ background: "#F4F6F8", minHeight: "100vh" }}
+    >
       {/* Sidebar */}
       <aside
+        className="cms-sidebar"
         style={{
-          width: 240,
-          flexShrink: 0,
           background: "#0A2540",
           minHeight: "100vh",
           display: "flex",
@@ -2949,7 +2960,7 @@ export default function CmsPage({ navigate }: CmsPageProps) {
       </aside>
 
       {/* Main content */}
-      <main style={{ flex: 1, padding: "2rem 2.5rem", overflow: "auto" }}>
+      <main className="cms-main">
         {section === "dashboard" && (
           <ContentDashboard setSection={setSection} />
         )}

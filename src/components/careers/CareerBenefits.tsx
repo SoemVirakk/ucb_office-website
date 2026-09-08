@@ -10,6 +10,7 @@ interface CareerBenefitsProps {
   items: CareerBenefit[]
 }
 
+/** Renders the career benefits grid. */
 export default function CareerBenefits({ items }: CareerBenefitsProps) {
   return (
     <div

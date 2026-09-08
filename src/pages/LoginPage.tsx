@@ -2,13 +2,13 @@ import { useState } from "react"
 import Alert from "../components/ui/Alert"
 import type { Page } from "../types/navigation"
 
-
 interface LoginPageProps {
   navigate: (p: Page) => void
 }
 
 type BankingType = "personal" | "business" | null
 
+/** Renders the public internet banking login entry screen. */
 export default function LoginPage({ navigate }: LoginPageProps) {
   const [selected, setSelected] = useState<BankingType>(null)
 

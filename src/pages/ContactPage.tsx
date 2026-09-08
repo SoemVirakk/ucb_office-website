@@ -4,7 +4,6 @@ import FaqAccordion from "../components/ui/FaqAccordion"
 import { faqCategories } from "../data/faqs"
 import type { Page } from "../types/navigation"
 
-
 interface ContactPageProps {
   navigate: (p: Page) => void
 }
@@ -36,18 +35,21 @@ const subjects = [
   "Other",
 ]
 
+/** Renders contact channels, inquiry form, and support FAQs. */
 export default function ContactPage({ navigate }: ContactPageProps) {
+  const contactParams = new URLSearchParams(window.location.search)
   const [form, setForm] = useState<FormState>({
     name: "",
     phone: "",
     email: "",
-    subject: "",
-    message: "",
+    subject: contactParams.get("subject") ?? "",
+    message: contactParams.get("message") ?? "",
   })
   const [errors, setErrors] = useState<FormErrors>({})
   const [submitted, setSubmitted] = useState(false)
   const [activeFaqCat, setActiveFaqCat] = useState("general")
 
+  /** Validates the current form state before allowing submission. */
   const validate = (): boolean => {
     const newErrors: FormErrors = {}
     if (!form.name.trim()) newErrors.name = "Full name is required."
@@ -63,6 +65,7 @@ export default function ContactPage({ navigate }: ContactPageProps) {
     return Object.keys(newErrors).length === 0
   }
 
+  /** Handles the current online-service form submission. */
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     if (!validate()) return
@@ -92,7 +95,7 @@ export default function ContactPage({ navigate }: ContactPageProps) {
           padding: "4rem 0 3rem",
         }}
       >
-        <div className="container">
+        {/* <div className="container">
           <h1
             style={{
               fontSize: 36,
@@ -107,7 +110,7 @@ export default function ContactPage({ navigate }: ContactPageProps) {
             We are here to help. Reach us by phone, email, or in-person at any
             UCB branch.
           </p>
-        </div>
+        </div> */}
       </section>
 
       {/* Emergency alert */}
@@ -188,7 +191,7 @@ export default function ContactPage({ navigate }: ContactPageProps) {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} noValidate>
+              <form id="contact-form" onSubmit={handleSubmit} noValidate>
                 <div
                   style={{
                     display: "grid",

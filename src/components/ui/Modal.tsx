@@ -9,6 +9,7 @@ interface ModalProps {
   maxWidth?: number
 }
 
+/** Renders an accessible modal dialog shell. */
 export default function Modal({
   open,
   onClose,
@@ -18,6 +19,7 @@ export default function Modal({
 }: ModalProps) {
   useEffect(() => {
     if (!open) return
+    /** Closes the modal when Escape is pressed. */
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose()
     }

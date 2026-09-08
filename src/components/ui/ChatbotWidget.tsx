@@ -39,6 +39,7 @@ interface ChatMessage {
 const SENSITIVE =
   /\b(password|pin\b|otp\b|cvv\b|card.?number|account.?number|secret)\b|\b\d{12,16}\b/i
 
+/** Creates a lightweight unique id for local chat messages. */
 const id = () => Math.random().toString(36).slice(2)
 
 const QUICK_ACTIONS: Btn[] = [
@@ -74,6 +75,7 @@ const QUICK_ACTIONS: Btn[] = [
   },
 ]
 
+/** Builds scripted chatbot replies for selected quick actions. */
 function getBotReplies(action: string, uiLang: LocaleCode): ChatMessage[] {
   const km = uiLang === "km"
 
@@ -463,6 +465,7 @@ function getBotReplies(action: string, uiLang: LocaleCode): ChatMessage[] {
   }
 }
 
+/** Returns a scripted chatbot answer for recognized user keywords. */
 function getKeywordReply(text: string): string {
   const t = text.toLowerCase()
   if (/\b(loan|borrow|mortgage|credit|km|repay)/i.test(t)) return "loan-info"
@@ -484,6 +487,7 @@ function getKeywordReply(text: string): string {
   return "fallback"
 }
 
+/** Renders the customer-help chatbot widget and message flow. */
 export default function ChatbotWidget({ navigate, lang }: ChatbotWidgetProps) {
   const [open, setOpen] = useState(false)
   const [minimized, setMinimized] = useState(false)
@@ -523,6 +527,7 @@ export default function ChatbotWidget({ navigate, lang }: ChatbotWidgetProps) {
     }
   }, [messages, typing, open, minimized])
 
+  /** Queues chatbot messages so replies appear with a short delay. */
   const addMessages = (msgs: ChatMessage[], delay = 700) => {
     setTyping(true)
     // Stagger replies so the conversation reads in the same order as the queue.
@@ -541,6 +546,7 @@ export default function ChatbotWidget({ navigate, lang }: ChatbotWidgetProps) {
     })
   }
 
+  /** Opens the chatbot panel and clears unread message state. */
   const handleOpen = () => {
     setOpen(true)
     setMinimized(false)
@@ -550,6 +556,7 @@ export default function ChatbotWidget({ navigate, lang }: ChatbotWidgetProps) {
     }
   }
 
+  /** Handles a chatbot quick action and appends the scripted response. */
   const handleAction = (action: string) => {
     if (action === "noop") return
     const replies = getBotReplies(action, chatLang)
@@ -569,6 +576,7 @@ export default function ChatbotWidget({ navigate, lang }: ChatbotWidgetProps) {
     addMessages(replies)
   }
 
+  /** Handles free-text chatbot submission and appends a matching response. */
   const handleSend = (e?: FormEvent) => {
     e?.preventDefault()
     const text = inputText.trim()
@@ -606,11 +614,14 @@ export default function ChatbotWidget({ navigate, lang }: ChatbotWidgetProps) {
     )
   }
 
+  /** Returns message text for the active chatbot language. */
   const txt = (msg: ChatMessage) =>
     chatLang === "km" && msg.textKm ? msg.textKm : msg.text
+  /** Returns button text for the active chatbot language. */
   const btnLabel = (b: Btn) =>
     chatLang === "km" && b.labelKm ? b.labelKm : b.label
 
+  /** Renders a user-authored chatbot message bubble. */
   const BubbleUser = ({ msg }: { msg: ChatMessage }) => (
     <div
       style={{
@@ -639,6 +650,7 @@ export default function ChatbotWidget({ navigate, lang }: ChatbotWidgetProps) {
     </div>
   )
 
+  /** Renders a bot-authored chatbot message bubble. */
   const BubbleBot = ({ msg }: { msg: ChatMessage }) => (
     <div
       style={{
@@ -822,6 +834,7 @@ export default function ChatbotWidget({ navigate, lang }: ChatbotWidgetProps) {
     </div>
   )
 
+  /** Renders a system notice inside the chatbot transcript. */
   const BubbleSystem = ({ msg }: { msg: ChatMessage }) => (
     <div style={{ textAlign: "center", margin: "0.5rem 0" }}>
       <div
@@ -841,6 +854,7 @@ export default function ChatbotWidget({ navigate, lang }: ChatbotWidgetProps) {
     </div>
   )
 
+  /** Renders the animated chatbot typing indicator. */
   const TypingIndicator = () => (
     <div
       style={{

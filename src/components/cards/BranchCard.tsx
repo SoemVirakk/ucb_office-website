@@ -17,6 +17,7 @@ const typeConfig: Record<string, {
   "24h-atm": { label: "24-hr ATM", variant: "gray" },
 }
 
+/** Renders a branch or ATM result card. */
 export default function BranchCard({
   branch,
   selected,

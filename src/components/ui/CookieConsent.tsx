@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 
 const STORAGE_KEY = "ucb_cookie_consent"
 
+/** Renders cookie consent and preference controls. */
 export default function CookieConsent() {
   const [visible, setVisible] = useState(false)
   const [showPreferences, setShowPreferences] = useState(false)
@@ -19,6 +20,7 @@ export default function CookieConsent() {
     }
   }, [])
 
+  /** Saves cookie preferences and hides the consent prompt. */
   const accept = (all: boolean) => {
     const consent = all
       ? { analytics: true, marketing: true, functional: true }

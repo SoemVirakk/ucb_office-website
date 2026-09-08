@@ -9,6 +9,7 @@ interface FaqAccordionProps {
   items: FaqItem[]
 }
 
+/** Renders FAQ items as an expandable accordion. */
 export default function FaqAccordion({ items }: FaqAccordionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 

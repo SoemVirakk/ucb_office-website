@@ -1,4 +1,3 @@
-
 interface MaintenancePageProps {
   navigate: (p: Page) => void
   startTime?: string
@@ -8,6 +7,7 @@ interface MaintenancePageProps {
   message?: string
 }
 
+/** Formats a date into a short localized time string. */
 function formatTime(iso: string) {
   return (
     new Date(iso).toLocaleString("en-GB", {
@@ -23,6 +23,7 @@ function formatTime(iso: string) {
   )
 }
 
+/** Renders one labeled unit in the maintenance countdown. */
 function CountdownUnit({ value, label }: { value: number label: string }) {
   return (
     <div style={{ textAlign: "center" }}>
@@ -58,6 +59,7 @@ function CountdownUnit({ value, label }: { value: number label: string }) {
   )
 }
 
+/** Renders the maintenance notice and recovery countdown. */
 export default function MaintenancePage({
   navigate,
   startTime = "2026-10-05T01:00:00+07:00",

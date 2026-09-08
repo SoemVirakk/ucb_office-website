@@ -143,6 +143,7 @@ const staticPages: SearchResult[] = [
   },
 ]
 
+/** Builds the searchable site index from public content datasets. */
 function buildIndex(): SearchResult[] {
   const results: SearchResult[] = [...staticPages]
 
@@ -221,6 +222,7 @@ const typeFilters = [
   { id: "job", label: "Jobs" },
 ]
 
+/** Renders site search, filters results, and routes users to selected content. */
 export default function SearchPage({
   navigate,
   initialQuery = "",
@@ -240,6 +242,7 @@ export default function SearchPage({
     })
   }, [query, submitted, typeFilter])
 
+  /** Applies the search query from the search input. */
   const handleSearch = () => {
     if (query.trim().length >= 2) setSubmitted(true)
   }
@@ -264,39 +267,23 @@ export default function SearchPage({
           >
             Search UCB
           </h1>
-          <div style={{ position: "relative" }}>
+          <div className="hero-search">
             <input
+              className="hero-search__input"
               value={query}
               onChange={(e) => {
-                setQuery(e.target.value)
-                if (!e.target.value) setSubmitted(false)
+                setQuery(e.target.value);
+                if (!e.target.value) setSubmitted(false);
               }}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               placeholder="Search products, branches, news, jobs..."
               autoFocus
-              style={{
-                width: "100%",
-                padding: "1rem 1.25rem",
-                paddingRight: "5rem",
-                borderRadius: 12,
-                border: "none",
-                fontSize: 17,
-                outline: "none",
-                fontFamily: "inherit",
-                boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
-              }}
             />
+
             <button
+              type="button"
               onClick={handleSearch}
-              className="btn-primary"
-              style={{
-                position: "absolute",
-                right: 6,
-                top: "50%",
-                transform: "translateY(-50%)",
-                padding: "0.625rem 1.25rem",
-                fontSize: 14,
-              }}
+              className="btn-primary hero-search__button"
             >
               Search
             </button>
@@ -305,7 +292,7 @@ export default function SearchPage({
             <p
               style={{
                 fontSize: 13,
-                color: "rgba(255,255,255,0.6)",
+                color: "rgb(255, 255, 255)",
                 marginTop: 8,
               }}
             >
@@ -337,9 +324,8 @@ export default function SearchPage({
                   style={{
                     padding: "0.5rem 1.25rem",
                     borderRadius: 20,
-                    border: `2px solid ${
-                      typeFilter === f.id ? "#009C9F" : "#E5E7EB"
-                    }`,
+                    border: `2px solid ${typeFilter === f.id ? "#009C9F" : "#E5E7EB"
+                      }`,
                     background: typeFilter === f.id ? "#009C9F" : "#fff",
                     color: typeFilter === f.id ? "#fff" : "#374151",
                     fontSize: 13,
@@ -363,9 +349,8 @@ export default function SearchPage({
             >
               {filtered.length === 0
                 ? `No results for "${query}"`
-                : `${filtered.length} result${
-                    filtered.length !== 1 ? "s" : ""
-                  } for "${query}"`}
+                : `${filtered.length} result${filtered.length !== 1 ? "s" : ""
+                } for "${query}"`}
             </div>
 
             {filtered.length === 0 ? (

@@ -6,6 +6,7 @@ interface ProductCardProps {
   onSelect: (id: string) => void
 }
 
+/** Renders a clickable product summary card. */
 export default function ProductCard({ product, onSelect }: ProductCardProps) {
   return (
     <div
@@ -57,18 +58,17 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
         >
           {product.icon}
         </div>
-        <div style={{ display: "flex", gap: 6 }}>
-          {product.isNew && <Badge label="New" variant="teal" />}
+        <div className="product-card__badges">
+          {product.isNew && (
+            <Badge label="New" variant="teal" />
+          )}
+
           {product.rateOrFee && (
             <span
-              style={{
-                fontSize: 12,
-                fontWeight: 700,
-                color: "#009C9F",
-                background: "#E6F7F7",
-                padding: "3px 8px",
-                borderRadius: 4,
-              }}
+              className={`product-card__rate ${product.rateOrFee.includes("%")
+                  ? "product-card__rate--interest"
+                  : "product-card__rate--fee"
+                }`}
             >
               {product.rateOrFee}
             </span>

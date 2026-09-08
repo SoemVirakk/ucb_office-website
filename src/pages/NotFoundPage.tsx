@@ -4,6 +4,7 @@ interface NotFoundPageProps {
   navigate: (p: Page) => void
 }
 
+/** Renders the fallback page for unmatched routes. */
 export default function NotFoundPage({ navigate }: NotFoundPageProps) {
   return (
     <div

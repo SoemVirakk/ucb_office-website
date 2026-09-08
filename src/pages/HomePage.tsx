@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import QuickActions from "../components/widgets/QuickActions"
 import ExchangeRateWidget from "../components/widgets/ExchangeRateWidget"
+import ExchangeRateTicker from "../components/widgets/ExchangeRateTicker.jsx"
 import ProductCard from "../components/cards/ProductCard"
 import PromotionCard from "../components/cards/PromotionCard"
 import NewsCard from "../components/cards/NewsCard"
@@ -11,7 +12,7 @@ import { banners } from "../data/banners"
 import { announcements, priorityConfig, isActive } from "../data/announcements"
 import type { LocaleCode } from "../types/localization"
 import type { Page } from "../types/navigation"
-
+import { routeForPage } from "../types/navigation"
 
 interface HomePageProps {
   navigate: (p: Page, id?: string) => void
@@ -56,6 +57,7 @@ const productCategories = [
   },
 ]
 
+/** Renders the dismissible high-priority announcement strip. */
 function AnnouncementBar({ navigate }: { navigate: (p: Page) => void }) {
   const [dismissed, setDismissed] = useState<string[]>([])
   const activeAlerts = announcements.filter(
@@ -137,9 +139,16 @@ function AnnouncementBar({ navigate }: { navigate: (p: Page) => void }) {
   )
 }
 
+/** Renders the rotating homepage banner carousel with controls. */
 function HeroCarousel({ navigate }: { navigate: (p: Page) => void }) {
+  const validBannerTargets = new Set(Object.keys(routeForPage))
   const activeBanners = banners
-    .filter((b) => b.status === "published" && b.placement === "homepage-hero")
+    .filter(
+      (b) =>
+        b.status === "published" &&
+        b.placement === "homepage-hero" &&
+        validBannerTargets.has(b.ctaTarget),
+    )
     .sort((a, b) => a.displayOrder - b.displayOrder)
   const [current, setCurrent] = useState(0)
   const [paused, setPaused] = useState(false)
@@ -159,9 +168,11 @@ function HeroCarousel({ navigate }: { navigate: (p: Page) => void }) {
   if (activeBanners.length === 0) return null
   const banner = activeBanners[current]
 
+  /** Moves the homepage carousel to the previous banner. */
   const goPrev = () => {
     setCurrent((c) => (c - 1 + activeBanners.length) % activeBanners.length)
   }
+  /** Moves the homepage carousel to the next banner. */
   const goNext = () => {
     setCurrent((c) => (c + 1) % activeBanners.length)
   }
@@ -175,6 +186,7 @@ function HeroCarousel({ navigate }: { navigate: (p: Page) => void }) {
         background: "#0A2540",
       }}
     >
+      <ExchangeRateTicker />
       <style>{`
         @keyframes kenBurns { from { transform: scale(1.04); } to { transform: scale(1); } }
         @media (max-width: 600px) { .carousel-content-inner { padding: 1.5rem !important; } .carousel-title { font-size: 22px !important; } .carousel-subtitle { font-size: 13px !important; } }
@@ -264,6 +276,7 @@ function HeroCarousel({ navigate }: { navigate: (p: Page) => void }) {
           </p>
           <div style={{ display: "flex", gap: "0.875rem", flexWrap: "wrap" }}>
             <button
+              type="button"
               onClick={() => navigate(banner.ctaTarget as Page)}
               className="btn-primary"
             >
@@ -401,6 +414,7 @@ function HeroCarousel({ navigate }: { navigate: (p: Page) => void }) {
   )
 }
 
+/** Renders the public website home page sections. */
 export default function HomePage({ navigate, lang }: HomePageProps) {
   const featuredProducts = products.filter((p) =>
     [
@@ -540,14 +554,7 @@ export default function HomePage({ navigate, lang }: HomePageProps) {
       {/* Promotions */}
       <section className="page-section">
         <div className="container">
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: "2rem",
-            }}
-          >
+          <div className="banking-tools-section__header">
             <div>
               <h2 className="section-title">Latest Promotions</h2>
               <p className="section-subtitle">
@@ -555,11 +562,11 @@ export default function HomePage({ navigate, lang }: HomePageProps) {
               </p>
             </div>
             <button
-              className="btn-outline"
-              onClick={() => navigate("promotions")}
-              style={{ flexShrink: 0 }}
+              type="button"
+              className="btn-outline banking-tools-section__action"
+              onClick={() => navigate("branches")}
             >
-              See All Offers →
+              View all exchange rates <span aria-hidden="true">→</span>
             </button>
           </div>
           <div
@@ -577,102 +584,113 @@ export default function HomePage({ navigate, lang }: HomePageProps) {
         </div>
       </section>
 
-      {/* Exchange rate + Branch locator */}
-      <section className="page-section" style={{ background: "#F4F6F8" }}>
+
+      {/* Exchange Rates */}
+      <section className="page-section banking-tools-section">
         <div className="container">
-          <div
-            className="grid-2-col"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "2.5rem",
-              alignItems: "start",
-            }}
-          >
+          <div className="banking-tools-section__header">
             <div>
-              <h2 className="section-title" style={{ marginBottom: "1.5rem" }}>
-                Exchange Rates
-              </h2>
-              <ExchangeRateWidget compact />
+              <h2 className="section-title">Exchange Rates</h2>
+              <p className="section-subtitle">
+                Indicative foreign exchange rates. Final rates apply at the time of transaction.
+              </p>
             </div>
+
+            <button
+              type="button"
+              className="btn-outline banking-tools-section__action"
+              onClick={() => navigate("exchange-rates")}
+            >
+              View all exchange rates <span aria-hidden="true">→</span>
+            </button>
+          </div>
+
+          <ExchangeRateWidget compact />
+        </div>
+      </section>
+
+
+      {/* Branch / ATM Locator */}
+      <section className="page-section">
+        <div className="container">
+          <div className="banking-tools-section__header">
             <div>
-              <h2 className="section-title" style={{ marginBottom: "1.5rem" }}>
-                Find a Branch or ATM
-              </h2>
-              <div
-                style={{
-                  background: "#fff",
-                  borderRadius: 16,
-                  boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
-                  overflow: "hidden",
-                }}
-              >
-                <div
-                  style={{
-                    height: 220,
-                    background: "linear-gradient(135deg, #E6F7F7, #F4F6F8)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexDirection: "column",
-                    gap: 12,
-                    borderBottom: "1px solid #E5E7EB",
-                  }}
-                >
-                  <span style={{ fontSize: 48 }}>🗺️</span>
-                  <span
-                    style={{ fontSize: 14, color: "#6B7280", fontWeight: 500 }}
-                  >
-                    Interactive map
+              <h2 className="section-title">Find a Branch or ATM</h2>
+              <p className="section-subtitle">
+                Search UCB locations and find services near you.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              className="btn-outline banking-tools-section__action"
+              onClick={() => navigate("branches")}
+            >
+              View all exchange rates <span aria-hidden="true">→</span>
+            </button>
+          </div>
+
+          <div className="location-finder">
+            <div className="location-finder__list">
+              <label className="sr-only" htmlFor="location-search">
+                Search branch or ATM
+              </label>
+
+              <input
+                id="location-search"
+                className="location-finder__search"
+                type="search"
+                placeholder="Search branch, ATM, or city"
+              />
+
+              <div className="location-finder__tabs" role="tablist" aria-label="Location type">
+                <button type="button" className="is-active" role="tab">
+                  All locations
+                </button>
+                <button type="button" role="tab">Branches</button>
+                <button type="button" role="tab">ATMs</button>
+              </div>
+
+              <div className="location-finder__results">
+                <button type="button" className="location-result">
+                  <span className="location-result__icon">🏦</span>
+                  <span>
+                    <strong>UCB Main Branch</strong>
+                    <small>Phnom Penh · Open today</small>
                   </span>
-                </div>
-                <div style={{ padding: "1.25rem" }}>
-                  <p
-                    style={{
-                      fontSize: 14,
-                      color: "#374151",
-                      marginBottom: "1rem",
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    Find UCB branches and ATMs across Cambodia — open 6 days a
-                    week, with 24-hour ATMs available in major cities.
-                  </p>
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "0.75rem",
-                      marginBottom: "1rem",
-                    }}
-                  >
-                    {["28 Branches", "45+ ATMs", "6 Provinces"].map((stat) => (
-                      <div
-                        key={stat}
-                        style={{
-                          flex: 1,
-                          textAlign: "center",
-                          padding: "0.625rem",
-                          background: "#F4F6F8",
-                          borderRadius: 8,
-                          fontSize: 13,
-                          fontWeight: 600,
-                          color: "#0A2540",
-                        }}
-                      >
-                        {stat}
-                      </div>
-                    ))}
-                  </div>
-                  <button
-                    className="btn-primary"
-                    onClick={() => navigate("branches")}
-                    style={{ width: "100%", justifyContent: "center" }}
-                  >
-                    Find Nearest Branch →
-                  </button>
-                </div>
+                  <span aria-hidden="true">›</span>
+                </button>
+
+                <button type="button" className="location-result">
+                  <span className="location-result__icon">🏧</span>
+                  <span>
+                    <strong>Central Market ATM</strong>
+                    <small>Phnom Penh · 24 hours</small>
+                  </span>
+                  <span aria-hidden="true">›</span>
+                </button>
+
+                <button type="button" className="location-result">
+                  <span className="location-result__icon">🏦</span>
+                  <span>
+                    <strong>Siem Reap Branch</strong>
+                    <small>Siem Reap · Open today</small>
+                  </span>
+                  <span aria-hidden="true">›</span>
+                </button>
               </div>
             </div>
+
+            <button
+              type="button"
+              className="location-finder__map"
+              onClick={() => navigate("branches")}
+              aria-label="Open branch and ATM map"
+            >
+              <span className="location-finder__map-icon">🗺️</span>
+              <strong>Open interactive map</strong>
+              <span>View nearby UCB branches and ATMs</span>
+            </button>
           </div>
         </div>
       </section>
@@ -680,7 +698,25 @@ export default function HomePage({ navigate, lang }: HomePageProps) {
       {/* News */}
       <section className="page-section">
         <div className="container">
-          <div
+
+          <div className="banking-tools-section__header">
+            <div>
+              <h2 className="section-title">Find a Branch or ATM</h2>
+              <p className="section-subtitle">
+                Search UCB locations and find services near you.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              className="btn-outline banking-tools-section__action"
+              onClick={() => navigate("branches")}
+            >
+              View all exchange rates <span aria-hidden="true">→</span>
+            </button>
+          </div>
+
+          {/* <div
             style={{
               display: "flex",
               alignItems: "center",
@@ -701,7 +737,7 @@ export default function HomePage({ navigate, lang }: HomePageProps) {
             >
               All News →
             </button>
-          </div>
+          </div> */}
           <div
             className="grid-3"
             style={{
@@ -778,112 +814,57 @@ export default function HomePage({ navigate, lang }: HomePageProps) {
         </div>
       </section>
 
-      {/* Security tips */}
-      <section style={{ background: "#FDF6E3", padding: "3rem 0" }}>
+
+      <section className="security-tips-section">
         <div className="container">
-          <div
-            style={{
-              display: "flex",
-              alignItems: "flex-start",
-              gap: "2rem",
-              background: "#fff",
-              borderRadius: 16,
-              padding: "2rem",
-              border: "1px solid #FDE68A",
-              boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
-            }}
-          >
-            <div
-              style={{
-                width: 56,
-                height: 56,
-                borderRadius: 14,
-                background: "#FDF6E3",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 28,
-                flexShrink: 0,
-              }}
-            >
-              🔒
+        <div className="security-tips-card">
+          <div className="security-tips-card__icon" aria-hidden="true">
+            🔒
+          </div>
+
+          <div className="security-tips-card__content">
+            <h2 id="security-tips-title" className="security-tips-card__title">
+              Stay Safe — Banking Security Tips
+            </h2>
+
+            <div className="security-tips-card__grid">
+              <article className="security-tip">
+                <span className="security-tip__icon" aria-hidden="true">🚫</span>
+                <div>
+                  <h3>Never share your PIN or OTP</h3>
+                  <p>UCB will never ask for your PIN, OTP, password, or full card number by phone, email, or social media.</p>
+                </div>
+              </article>
+
+              <article className="security-tip">
+                <span className="security-tip__icon" aria-hidden="true">🔗</span>
+                <div>
+                  <h3>Check the website URL</h3>
+                  <p>Verify that you are on the official UCB website before entering login credentials.</p>
+                </div>
+              </article>
+
+              <article className="security-tip">
+                <span className="security-tip__icon" aria-hidden="true">📱</span>
+                <div>
+                  <h3>Enable biometric login</h3>
+                  <p>Use fingerprint or Face ID in UCB Mobile App for an additional layer of protection.</p>
+                </div>
+              </article>
             </div>
-            <div style={{ flex: 1 }}>
-              <h2
-                style={{
-                  fontSize: 20,
-                  fontWeight: 700,
-                  color: "#0A2540",
-                  marginBottom: "0.75rem",
-                }}
+
+            <div className="security-tips-card__action">
+              <button
+                type="button"
+                className="btn-outline security-tips-card__button"
+                onClick={() => navigate("security")}
               >
-                Stay Safe — Banking Security Tips
-              </h2>
-              <div
-                className="grid-3"
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3, 1fr)",
-                  gap: "1.5rem",
-                }}
-              >
-                {[
-                  {
-                    icon: "🚫",
-                    title: "Never share your PIN or OTP",
-                    desc: "UCB staff will never ask for your PIN, OTP, or full card number by phone or email.",
-                  },
-                  {
-                    icon: "🔗",
-                    title: "Check the website URL",
-                    desc: "Always verify you are on www.ucb.com.kh before entering any login credentials.",
-                  },
-                  {
-                    icon: "📱",
-                    title: "Enable biometric login",
-                    desc: "Use fingerprint or face ID in UCB Mobile App for an extra layer of security.",
-                  },
-                ].map((tip) => (
-                  <div key={tip.title} style={{ display: "flex", gap: 12 }}>
-                    <span style={{ fontSize: 20, flexShrink: 0, marginTop: 2 }}>
-                      {tip.icon}
-                    </span>
-                    <div>
-                      <div
-                        style={{
-                          fontWeight: 600,
-                          fontSize: 14,
-                          color: "#0A2540",
-                          marginBottom: 4,
-                        }}
-                      >
-                        {tip.title}
-                      </div>
-                      <div
-                        style={{
-                          fontSize: 13,
-                          color: "#6B7280",
-                          lineHeight: 1.6,
-                        }}
-                      >
-                        {tip.desc}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div style={{ marginTop: "1.25rem" }}>
-                <button
-                  className="btn-outline"
-                  onClick={() => navigate("security")}
-                  style={{ fontSize: 13 }}
-                >
-                  Visit Security Center →
-                </button>
-              </div>
+                Visit Security Center <span aria-hidden="true">→</span>
+              </button>
             </div>
           </div>
         </div>
+         </div>
       </section>
     </div>
   )

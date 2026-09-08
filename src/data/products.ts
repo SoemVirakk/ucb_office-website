@@ -383,18 +383,17 @@ export const products: Product[] = [
     tagline: "Full banking in the palm of your hand",
     icon: "📱",
     highlights: [
-      "Transfer, pay bills, top-up",
-      "QR code payments",
-      "Biometric login",
-      "Transaction notifications",
+      "Transfers and bill payments",
+      "Mobile top-up and KHQR payments",
+      "Card services in one app",
     ],
     isNew: false,
     eligibility: ["All UCB account holders"],
     requiredDocs: ["UCB account number", "Registered mobile number"],
     fees: [
       { item: "App download", amount: "Free" },
-      { item: "Internal transfers", amount: "Free" },
-      { item: "External transfers", amount: "USD 0.25" },
+      { item: "Registration", amount: "Contact UCB" },
+      { item: "Service charges", amount: "See current tariff" },
     ],
     faqs: [
       {
@@ -414,10 +413,9 @@ export const products: Product[] = [
     tagline: "Powerful banking from your browser",
     icon: "🌐",
     highlights: [
-      "Multi-account management",
-      "Bulk payment upload",
-      "Statement download (PDF/Excel)",
-      "Scheduled transfers",
+      "Account balance overview",
+      "Payment and transfer tools",
+      "Statement access",
     ],
     eligibility: ["UCB account holders with email address"],
     requiredDocs: ["UCB account", "Valid email", "OTP-enabled mobile number"],
@@ -493,26 +491,24 @@ export const products: Product[] = [
     id: "remittance",
     category: "digital",
     name: "UCB International Remittance",
-    tagline: "Send money across borders, fast and secure",
+    tagline: "International transfer support through UCB",
     icon: "✈️",
     highlights: [
-      "150+ countries supported",
-      "Same-day SWIFT transfers",
-      "Competitive exchange rates",
-      "Track transfer status live",
+      "Cross-border transfer support",
+      "Beneficiary bank detail guidance",
+      "Branch and contact support",
     ],
-    rateOrFee: "From USD 5 per transfer",
     isNew: false,
     eligibility: ["UCB account holder", "Valid ID"],
     requiredDocs: ["National ID or Passport", "Beneficiary bank details"],
     fees: [
-      { item: "SWIFT transfer fee", amount: "USD 15 + 0.1% (min USD 5)" },
-      { item: "FX margin", amount: "0.5% over mid-rate" },
+      { item: "Transfer fees", amount: "See current tariff" },
+      { item: "Exchange rate", amount: "Confirmed at transaction time" },
     ],
     faqs: [
       {
         q: "How long does an international transfer take?",
-        a: "1–3 business days via SWIFT, same-day for priority transfers.",
+        a: "Processing time depends on the destination, intermediary bank, and beneficiary bank requirements. Contact UCB for current guidance.",
       },
     ],
   },
@@ -552,3 +548,4 @@ export const products: Product[] = [
     ],
   },
 ]
+

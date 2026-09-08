@@ -1,5 +1,5 @@
 import { ArrowRight, ChevronRight } from "lucide-react"
-import { publicAsset } from "../../utils/assets"
+import { publicAsset, siteHref } from "../../utils/assets"
 
 /** Renders the decorative business growth chart used by the Business Banking hero. */
 function BusinessGrowthGraphic() {
@@ -96,7 +96,7 @@ export default function PageHero({
               return (
                 <li className="breadcrumb__item" key={`${crumb.label}-${index}`}>
                   {crumb.href && !isCurrent ? (
-                    <a className="breadcrumb__link" href={crumb.href}>
+                    <a className="breadcrumb__link" href={siteHref(crumb.href)}>
                       {crumb.label}
                     </a>
                   ) : (
@@ -128,7 +128,7 @@ export default function PageHero({
             {actions.map((action) => (
               <a
                 className={`page-hero__action page-hero__action--${action.variant ?? "primary"}`}
-                href={action.href}
+                href={siteHref(action.href)}
                 key={`${action.href}-${action.label}`}
               >
                 {action.label}

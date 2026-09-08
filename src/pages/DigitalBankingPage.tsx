@@ -1,6 +1,6 @@
 import { FeatureCard, SectionHeader } from "../components/cards/UcbCardSystem"
 import { mobileBankingFeatures } from "../data/digitalBankingCards"
-import { publicAsset } from "../utils/assets"
+import { publicAsset, siteHref } from "../utils/assets"
 
 interface DigitalBankingPageProps {
   navigate: (p: Page) => void
@@ -51,6 +51,10 @@ const securityFeatures = [
     desc: "Bank-grade SSL encryption protects all your data and transactions end-to-end.",
   },
 ]
+
+const contactDigitalSupportHref = siteHref(
+  "/contact?subject=Digital%20Banking%20Support",
+)
 
 /** Renders digital banking features, app benefits, and support calls to action. */
 export default function DigitalBankingPage({
@@ -286,7 +290,7 @@ export default function DigitalBankingPage({
           <div className="digital-register-action">
             <a
               className="btn-primary digital-register-action__button"
-              href="/contact?subject=Digital%20Banking%20Support&message=I%20would%20like%20to%20register%20for%20UCB%20Mobile%20Banking.#contact-form"
+              href={`${contactDigitalSupportHref}&message=I%20would%20like%20to%20register%20for%20UCB%20Mobile%20Banking.#contact-form`}
             >
               Register for Mobile Banking
             </a>
@@ -493,7 +497,7 @@ export default function DigitalBankingPage({
             </a>
             <a
               className="btn-outline digital-cta-actions__button digital-cta-actions__button--outline"
-              href="/contact?subject=Digital%20Banking%20Support&message=I%20would%20like%20to%20register%20for%20UCB%20Internet%20Banking.#contact-form"
+              href={`${contactDigitalSupportHref}&message=I%20would%20like%20to%20register%20for%20UCB%20Internet%20Banking.#contact-form`}
             >
               Register for Internet Banking
             </a>

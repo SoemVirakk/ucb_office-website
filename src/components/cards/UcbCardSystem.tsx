@@ -1,4 +1,5 @@
 import { ArrowRight, Check, type LucideIcon } from "lucide-react"
+import { siteHref } from "../../utils/assets"
 
 interface CardIconProps {
   icon: LucideIcon
@@ -51,7 +52,7 @@ export function ProductServiceCard({ product }: { product: ProductServiceCardDat
   return (
     <a
       className="ucb-product-service-card"
-      href={product.href}
+      href={siteHref(product.href)}
       aria-label={`Learn more about ${product.title}`}
     >
       <div className="ucb-card-topline">
@@ -101,7 +102,7 @@ export function FeatureCard({ feature }: { feature: FeatureCardData }) {
   return feature.href ? (
     <a
       className="ucb-feature-card"
-      href={feature.href}
+      href={siteHref(feature.href)}
       aria-label={`${feature.ctaLabel ?? "Learn more"} about ${feature.title}`}
     >
       {content}

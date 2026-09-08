@@ -1,3 +1,5 @@
+import { publicAsset } from "../utils/assets"
+
 export type CreditCardProduct = {
   id: string
   slug: string
@@ -32,8 +34,8 @@ export const mockCreditCards: CreditCardProduct[] = [
       currency: "USD",
       displayText: "Annual fee: USD 50",
     },
-    cardFrontImageUrl: "/assets/images/cards/ucb-platinum-visa-front.png",
-    cardBackImageUrl: "/assets/images/cards/ucb-platinum-back.svg",
+    cardFrontImageUrl: publicAsset("assets/images/cards/ucb-platinum-visa-front.png"),
+    cardBackImageUrl: publicAsset("assets/images/cards/ucb-platinum-back.svg"),
     productDetailUrl: "/products/cards/ucb-platinum-credit-card",
   },
   {
@@ -46,8 +48,8 @@ export const mockCreditCards: CreditCardProduct[] = [
     annualFee: {
       displayText: "Annual fee: Free",
     },
-    cardFrontImageUrl: "/assets/images/cards/ucb-platinum-mastercard-front.png",
-    cardBackImageUrl: "/assets/images/cards/ucb-platinum-back.svg",
+    cardFrontImageUrl: publicAsset("assets/images/cards/ucb-platinum-mastercard-front.png"),
+    cardBackImageUrl: publicAsset("assets/images/cards/ucb-platinum-back.svg"),
     productDetailUrl: "/products/cards/ucb-visa-debit-card",
   },
   {
@@ -62,8 +64,8 @@ export const mockCreditCards: CreditCardProduct[] = [
       currency: "USD",
       displayText: "Annual fee: USD 25",
     },
-    cardFrontImageUrl: "/assets/images/cards/ucb-platinum-visa-front.png",
-    cardBackImageUrl: "/assets/images/cards/ucb-platinum-back.svg",
+    cardFrontImageUrl: publicAsset("assets/images/cards/ucb-platinum-visa-front.png"),
+    cardBackImageUrl: publicAsset("assets/images/cards/ucb-platinum-back.svg"),
     productDetailUrl: "/products/cards/ucb-classic-credit-card",
   },
   {
@@ -76,8 +78,8 @@ export const mockCreditCards: CreditCardProduct[] = [
     annualFee: {
       displayText: "Annual fee: Free",
     },
-    cardFrontImageUrl: "/assets/images/cards/ucb-platinum-mastercard-front.png",
-    cardBackImageUrl: "/assets/images/cards/ucb-platinum-back.svg",
+    cardFrontImageUrl: publicAsset("assets/images/cards/ucb-platinum-mastercard-front.png"),
+    cardBackImageUrl: publicAsset("assets/images/cards/ucb-platinum-back.svg"),
     productDetailUrl: "/products/cards/ucb-business-debit-card",
   },
 ]

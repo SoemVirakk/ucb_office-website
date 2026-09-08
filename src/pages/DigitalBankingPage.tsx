@@ -1,5 +1,6 @@
 import { FeatureCard, SectionHeader } from "../components/cards/UcbCardSystem"
 import { mobileBankingFeatures } from "../data/digitalBankingCards"
+import { publicAsset } from "../utils/assets"
 
 interface DigitalBankingPageProps {
   navigate: (p: Page) => void
@@ -231,12 +232,12 @@ export default function DigitalBankingPage({
               {[
                 {
                   bg: "#1A3D5C",
-                  img: "/assets/digitalbanking/mobile2.webp",
+                  img: publicAsset("assets/digitalbanking/mobile2.webp"),
                   alt: "UCB Mobile App dashboard",
                 },
                 {
                   bg: "#007B7E",
-                  img: "/assets/digitalbanking/mobile1.webp",
+                  img: publicAsset("assets/digitalbanking/mobile1.webp"),
                   alt: "UCB Mobile App transfer screen",
                   transform: "translateY(24px)",
                 },

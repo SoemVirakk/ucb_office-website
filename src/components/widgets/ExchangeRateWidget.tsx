@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { Minus, TrendingDown, TrendingUp } from "lucide-react"
+import { publicAsset } from "../../utils/assets"
 
 interface ExchangeRateWidgetProps {
   compact?: boolean
@@ -41,7 +42,7 @@ const MOCK_EXCHANGE_RATES: ExchangeRateResponse = {
     {
       code: "USD",
       name: "US Dollar",
-      flag: "/assets/images/flags/us.svg",
+      flag: publicAsset("assets/images/flags/us.svg"),
       buy: 4080,
       sell: 4100,
       decimals: 0,
@@ -49,7 +50,7 @@ const MOCK_EXCHANGE_RATES: ExchangeRateResponse = {
     {
       code: "THB",
       name: "Thai Baht",
-      flag: "/assets/images/flags/th.svg",
+      flag: publicAsset("assets/images/flags/th.svg"),
       buy: 34.2,
       sell: 34.8,
       decimals: 3,
@@ -57,7 +58,7 @@ const MOCK_EXCHANGE_RATES: ExchangeRateResponse = {
     {
       code: "CNY",
       name: "Chinese Yuan",
-      flag: "/assets/images/flags/cn.svg",
+      flag: publicAsset("assets/images/flags/cn.svg"),
       buy: 7.1,
       sell: 7.18,
       decimals: 3,
@@ -65,7 +66,7 @@ const MOCK_EXCHANGE_RATES: ExchangeRateResponse = {
     {
       code: "JPY",
       name: "Japanese Yen",
-      flag: "/assets/images/flags/jp.svg",
+      flag: publicAsset("assets/images/flags/jp.svg"),
       buy: 147.2,
       sell: 149.8,
       decimals: 3,
@@ -73,7 +74,7 @@ const MOCK_EXCHANGE_RATES: ExchangeRateResponse = {
     {
       code: "EUR",
       name: "Euro",
-      flag: "/assets/images/flags/eu.svg",
+      flag: publicAsset("assets/images/flags/eu.svg"),
       buy: 1.085,
       sell: 1.095,
       decimals: 3,

@@ -3,6 +3,7 @@ import { useLocation, useNavigate as useRouterNavigate } from "react-router-dom"
 import HeaderDropdown from "./HeaderDropdown"
 import type { LocaleCode } from "../../types/localization"
 import type { Page } from "../../types/navigation"
+import { publicAsset } from "../../utils/assets"
 
 interface HeaderProps {
   page: Page
@@ -313,7 +314,7 @@ export default function Header({
           aria-label="UCB Home"
         >
           <img
-            src="/assets/logo.jpg"
+            src={publicAsset("assets/logo.jpg")}
             alt="UCB Bank"
             style={{
               width: 40,

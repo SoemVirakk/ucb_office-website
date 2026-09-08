@@ -1,4 +1,5 @@
 import type { LocalizedText } from "./languages"
+import { publicAsset } from "../utils/assets"
 
 export type ContentEntityType = "BANNER" | "PAGE" | "PROMOTION" | "DIGITAL_SERVICE"
 
@@ -58,7 +59,7 @@ export const mockContent: MockContentItem[] = [
 
     status: "PUBLISHED",
 
-    imageUrl: "/assets/ucb-mobile-banking.jpg",
+    imageUrl: publicAsset("assets/ucb-mobile-banking.jpg"),
 
     sortOrder: 1,
 

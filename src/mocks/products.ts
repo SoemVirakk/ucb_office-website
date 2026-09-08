@@ -1,4 +1,5 @@
 import type { LocalizedText } from "./languages"
+import { publicAsset } from "../utils/assets"
 
 export interface Product {
   id: string
@@ -64,7 +65,7 @@ export const mockProducts: Product[] = [
       ],
     },
 
-    imageUrl: "/assets/savings-account.jpg",
+    imageUrl: publicAsset("assets/savings-account.jpg"),
 
     status: "ACTIVE",
 
@@ -154,7 +155,7 @@ export const mockProducts: Product[] = [
       "zh-CN": ["生物识别登录", "KHQR 二维码支付和缴费", "即时交易通知"],
     },
 
-    imageUrl: "/assets/ucb-mobile-banking.jpg",
+    imageUrl: publicAsset("assets/ucb-mobile-banking.jpg"),
 
     status: "ACTIVE",
 

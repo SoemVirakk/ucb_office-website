@@ -1,9 +1,11 @@
 export const tickerCurrencies = ["USD", "THB", "EUR", "AUD", "CNY", "JPY"]
 
+const publicAsset = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, "")}`
+
 export const exchangeRateTickerMock = [
   {
     currency: "USD",
-    flagSrc: "/assets/images/flags/us.svg",
+    flagSrc: publicAsset("assets/images/flags/us.svg"),
     flagAlt: "United States flag",
     buy: 4043,
     sell: 4058,
@@ -11,7 +13,7 @@ export const exchangeRateTickerMock = [
   },
   {
     currency: "THB",
-    flagSrc: "/assets/images/flags/th.svg",
+    flagSrc: publicAsset("assets/images/flags/th.svg"),
     flagAlt: "Thailand flag",
     buy: 118,
     sell: 121,
@@ -19,7 +21,7 @@ export const exchangeRateTickerMock = [
   },
   {
     currency: "EUR",
-    flagSrc: "/assets/images/flags/eu.svg",
+    flagSrc: publicAsset("assets/images/flags/eu.svg"),
     flagAlt: "European Union flag",
     buy: 4380,
     sell: 4432,
@@ -27,7 +29,7 @@ export const exchangeRateTickerMock = [
   },
   {
     currency: "AUD",
-    flagSrc: "/assets/images/flags/au.svg",
+    flagSrc: publicAsset("assets/images/flags/au.svg"),
     flagAlt: "Australia flag",
     buy: 2630,
     sell: 2688,
@@ -35,7 +37,7 @@ export const exchangeRateTickerMock = [
   },
   {
     currency: "CNY",
-    flagSrc: "/assets/images/flags/cn.svg",
+    flagSrc: publicAsset("assets/images/flags/cn.svg"),
     flagAlt: "China flag",
     buy: 565,
     sell: 579,
@@ -43,7 +45,7 @@ export const exchangeRateTickerMock = [
   },
   {
     currency: "JPY",
-    flagSrc: "/assets/images/flags/jp.svg",
+    flagSrc: publicAsset("assets/images/flags/jp.svg"),
     flagAlt: "Japan flag",
     buy: 27,
     sell: 28,

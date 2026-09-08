@@ -1,4 +1,5 @@
 import type { LocalizedText } from "./languages"
+import { publicAsset } from "../utils/assets"
 
 export interface NewsArticle {
   id: string
@@ -48,7 +49,7 @@ export const mockNews: NewsArticle[] = [
         "最新版本的 UCB 手机银行通过更简洁的设计和更强的安全控制，让日常银行服务更加便捷。",
     },
 
-    imageUrl: "/assets/ucb-mobile-banking.jpg",
+    imageUrl: publicAsset("assets/ucb-mobile-banking.jpg"),
 
     publishedAt: "2026-08-25",
 

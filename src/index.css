@@ -1646,7 +1646,7 @@ select {
   min-height: 230px;
   overflow: hidden;
   background-color: #0a2540;
-  background-image: url("/assets/images/heroes/personal-banking-hero.jpg");
+  background-image: url("/ucb_office-website/assets/images/heroes/personal-banking-hero.jpg");
   background-repeat: no-repeat;
   background-position: center right;
   background-size: cover;
@@ -1668,7 +1668,7 @@ select {
   min-height: 230px;
   overflow: hidden;
   background-color: #0a2540;
-  background-image: url("/assets/images/heroes/business-banking-hero.jpg");
+  background-image: url("/ucb_office-website/assets/images/heroes/business-banking-hero.jpg");
   background-repeat: no-repeat;
   background-position: center right;
   background-size: cover;

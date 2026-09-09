@@ -2,6 +2,7 @@ import { defineConfig, type HtmlTagDescriptor, type Plugin } from "vite"
 import react from "@vitejs/plugin-react"
 import tailwindcss from "@tailwindcss/vite"
 import path from "node:path"
+import { writeFileSync } from "node:fs"
 
 import siteConfiguration from "./.figma/make/site.json" with { type: "json" }
 
@@ -114,14 +115,12 @@ function figmaSiteConfiguration(config: FigmaSiteConfiguration): Plugin {
         res.end(robotsTxt)
       })
     },
-    generateBundle() {
+    writeBundle() {
       if (!robotsTxt) return
-
-      this.emitFile({
-        type: "asset",
-        fileName: "robots.txt",
-        source: robotsTxt,
-      })
+      writeFileSync(
+        path.resolve(import.meta.dirname, "dist", "robots.txt"),
+        robotsTxt,
+      )
     },
     transformIndexHtml: {
       order: "pre",

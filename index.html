@@ -9,7 +9,13 @@
         var redirect = sessionStorage.redirect
         delete sessionStorage.redirect
         if (redirect && redirect !== location.href) {
-          history.replaceState(null, null, redirect)
+          var url = new URL(redirect)
+          var base = "/digital-banking/"
+          var path = url.pathname
+          if (base !== "/" && path.indexOf(base) === 0) {
+            path = "/" + path.slice(base.length)
+          }
+          location.replace(base + "#" + path + url.search + url.hash)
         }
       })()
     </script>

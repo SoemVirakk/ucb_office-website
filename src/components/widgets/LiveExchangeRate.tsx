@@ -1,10 +1,20 @@
 import { useEffect, useRef, useState } from "react"
 import { getUsdQuoteExchangeRate } from "../../services/exchangeRatesApi"
+import { shouldUseStaticExchangeRates } from "../../utils/hosting"
 
 type RateStatus = "loading" | "live" | "stale"
 type QuoteCode = "KHR" | "EUR" | "THB" | "CNY" | "SGD" | "GBP" | "JPY"
 
 const quotes: QuoteCode[] = ["KHR", "EUR", "THB", "CNY", "SGD", "GBP", "JPY"]
+const staticRates: Record<QuoteCode, number> = {
+  KHR: 4100,
+  EUR: 0.92,
+  THB: 35.7,
+  CNY: 7.18,
+  SGD: 1.34,
+  GBP: 0.79,
+  JPY: 149,
+}
 
 function formatRate(rate: number, quote: QuoteCode): string {
   if (quote === "KHR" || quote === "JPY") {
@@ -29,6 +39,21 @@ export default function LiveExchangeRate() {
 
   useEffect(() => {
     let mounted = true
+
+    if (shouldUseStaticExchangeRates()) {
+      ratesRef.current = staticRates
+      setRates(staticRates)
+      setStatus("stale")
+      const intervalId = window.setInterval(() => {
+        currentIndexRef.current = (currentIndexRef.current + 1) % quotes.length
+        setCurrentIndex(currentIndexRef.current)
+      }, 3000)
+
+      return () => {
+        mounted = false
+        window.clearInterval(intervalId)
+      }
+    }
 
     const loadRate = async (quote: QuoteCode) => {
       if (loadingRef.current) return

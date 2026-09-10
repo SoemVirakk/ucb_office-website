@@ -3,6 +3,7 @@ import {
   exchangeRateTickerMock,
   tickerCurrencies,
 } from "../../data/exchangeRateTickerMock"
+import { shouldUseStaticExchangeRates } from "../../utils/hosting"
 import "./ExchangeRateTicker.css"
 
 const EXCHANGE_RATES_URL = "/api/v1/public/exchange-rates"
@@ -90,6 +91,8 @@ export default function ExchangeRateTicker() {
   const rate = visibleRates[currentIndex % visibleRates.length]
 
   useEffect(() => {
+    if (shouldUseStaticExchangeRates()) return undefined
+
     const controller = new AbortController()
     let mounted = true
 

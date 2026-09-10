@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { Minus, TrendingDown, TrendingUp } from "lucide-react"
 import { publicAsset } from "../../utils/assets"
+import { shouldUseStaticExchangeRates } from "../../utils/hosting"
 
 interface ExchangeRateWidgetProps {
   compact?: boolean
@@ -187,6 +188,12 @@ export default function ExchangeRateWidget({
   )
 
   useEffect(() => {
+    if (shouldUseStaticExchangeRates()) {
+      setLoading(false)
+      setHasError(false)
+      return undefined
+    }
+
     const controller = new AbortController()
     let mounted = true
 

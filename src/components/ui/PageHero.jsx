@@ -81,11 +81,11 @@ export default function PageHero({
     >
       {isPersonalHero && <div className="page-hero__overlay" aria-hidden="true" />}
 
-      {isBusinessHero && (
-        <div className="page-hero__visual" aria-hidden="true">
-          <BusinessGrowthGraphic />
-        </div>
-      )}
+      {/* {isBusinessHero && (
+        // <div className="page-hero__visual" aria-hidden="true">
+        //   <BusinessGrowthGraphic />
+        // </div>
+      )} */}
 
       <div className="container page-hero__container">
         <nav className="page-hero__breadcrumb" aria-label="Breadcrumb">

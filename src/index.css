@@ -3103,11 +3103,11 @@ select:focus-visible {
   }
 }
 
-@media (max-width: 900px) {
+/* @media (max-width: 900px) {
   .page-hero__visual {
     display: none;
   }
-}
+} */
 
 /* Carousel accessible */
 .carousel-controls {
